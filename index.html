@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Question Paper Selector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
       --bg: #f7eae0;
@@ -22,7 +26,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font: 16px/1.5 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif; /* Fixed font syntax */
       transition: background 0.3s, color 0.3s;
     }
 
@@ -215,7 +219,6 @@
   <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">🌓</button>
   <main class="wrapper">
 
-    <!-- LOGIN PAGE -->
     <section class="card" id="loginPage">
       <div class="logo-container">
         <img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="RCPIT Logo" class="logo">
@@ -237,7 +240,6 @@
       </form>
     </section>
 
-    <!-- BRANCH PAGE -->
     <section class="card" id="branchPage" style="display:none">
       <h1>Select Your Branch</h1>
       <button class="option" data-branch="First Year">First Year</button>
@@ -252,7 +254,6 @@
       <button class="option" data-branch="E&TC">E&TC</button>
     </section>
 
-    <!-- STUDY YEAR PAGE -->
     <section class="card" id="studyPage" style="display:none">
       <h1 id="branchTitle"></h1>
       <p class="subtitle">Select Study Year</p>
@@ -262,7 +263,6 @@
       <button class="option" id="backBranch">⬅ Back to Branch</button>
     </section>
 
-    <!-- ACADEMIC YEAR PAGE -->
     <section class="card" id="yearPage" style="display:none">
       <h1 id="yearTitle"></h1>
       <p class="subtitle">Select Academic Year</p>
@@ -273,7 +273,6 @@
       <button class="option" id="backStudy">⬅ Back</button>
     </section>
 
-    <!-- SUBJECT PAGE -->
     <section class="card" id="subjectPage" style="display:none">
       <h1 id="subjectTitle"></h1>
       <p class="subtitle">Select Subject</p>
@@ -281,7 +280,6 @@
       <button class="option" id="backYear">⬅ Back to Academic Year</button>
     </section>
 
-    <!-- PAPER TYPE PAGE -->
     <section class="card" id="paperTypePage" style="display:none">
       <h1>Select Paper Type</h1>
       <p class="subtitle" id="paperTypeSubtitle">Click a button below to open the corresponding PDF file.</p>
@@ -302,6 +300,7 @@
 
     let selectedBranch='',selectedStudy='',selectedYear='',selectedSubject='',selectedPaperType='';
 
+    // DATA OBJECT
     const subjectsData = {
     "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "Engineering Mechanics", "E.C.S."],
     "CS&E": { 
@@ -340,7 +339,7 @@
       SY: ["EDC", "Digital Electronics", "Signals & Systems", "Maths III"], 
       TY: ["OS", "M&M", "DSP", "DSA"], 
       LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"] }
-  };
+    };
 
     function showPage(page){pages.forEach(p=>p.style.display='none');page.style.display='flex';}
 
@@ -393,14 +392,16 @@
             subjectList.appendChild(b);
           });
         };
-        if(selectedBranch==='First Year') display(subjects["First Year"]);
-        else display(subjects[selectedBranch]?.[selectedStudy]||[]);
+        // FIXED: Changed 'subjects' to 'subjectsData'
+        if(selectedBranch==='First Year') display(subjectsData["First Year"]);
+        else display(subjectsData[selectedBranch]?.[selectedStudy]||[]);
+        
         document.getElementById('subjectTitle').textContent=`${selectedBranch} - ${selectedYear}`;
         showPage(document.getElementById('subjectPage'));
       };
     });
 
-    // ✅ UPDATED FUNCTION
+    // Updated Function to load paper types
     function loadPaperTypes() {
       const paperTypeButtons = document.getElementById('paperTypeButtons');
       paperTypeButtons.innerHTML = '';
@@ -417,16 +418,14 @@
       ];
 
       const otherPapers = [
-        { label: "TT-I (Terminal Test I)", type: "TT-I" },       
+        { label: "TT-I (Terminal Test I)", type: "TT-I" },        
         { label: "TT-II (Terminal Test II)", type: "TT-II" },
         { label: "End Semester Exam", type: "EndSemester" },
         { label: "Re-End Semester Exam", type: "ReEndSemester" }
       ];
 
-      // ✅ Choose FY or Other Branches
       const papersToShow = selectedBranch === 'First Year' ? fyPapers : otherPapers;
 
-      // Render paper buttons dynamically
       papersToShow.forEach(p => {
         const btn = document.createElement('button');
         btn.className = 'option';
@@ -437,29 +436,25 @@
       });
     }
 
-    // ✅ File opener logic
     function handlePaperClick(e) {
       selectedPaperType = e.target.dataset.type;
       const safe = s => s.replace(/[^a-zA-Z0-9]/g, '');
       const code = selectedBranch === 'First Year' ? 'FY' : selectedStudy;
+      // Ensure the 'papers' folder exists relative to this HTML file
       const file = `${safe(selectedBranch)}-${safe(code)}-${safe(selectedYear)}-${safe(selectedSubject)}-${safe(selectedPaperType)}.pdf`;
 
       window.open(`papers/${file}`, '_blank');
       document.getElementById('paperTypeSubtitle').innerHTML = `Opening <b>${selectedPaperType}</b>... <br><span style="font-size:12px;opacity:0.7;">Check new tab.</span>`;
     }
 
-    // ✅ Navigation buttons
+    // Navigation buttons
     document.getElementById('backBranch').onclick = () => showPage(document.getElementById('branchPage'));
     document.getElementById('backStudy').onclick = () => selectedBranch === 'First Year' ? showPage(document.getElementById('branchPage')) : showPage(document.getElementById('studyPage'));
     document.getElementById('backYear').onclick = () => showPage(document.getElementById('yearPage'));
     document.getElementById('backToSubjects').onclick = () => showPage(document.getElementById('subjectPage'));
 
-    // ✅ Default page
+    // Default page
     showPage(document.getElementById('loginPage'));
   </script>
 </body>
 </html>
-
-
-
-
