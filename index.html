@@ -302,10 +302,10 @@
 
     let selectedBranch='',selectedStudy='',selectedYear='',selectedSubject='',selectedPaperType='';
 
-    const subjects={
-      "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "Engineering Mechanics", "E.C.S."],
+    const subjectsData = {
+    "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "Engineering Mechanics", "E.C.S."],
     "CS&E": { 
-      SY: ["DSA", "OOP", "Discrete Mathematics", "COA"], 
+      SY: ["DSA", "DBMS", "Discrete Mathematics", "COA"], 
       TY: ["DBMS", "OS", "Computer Networks", "Theory of Computation"], 
       LY: ["Compiler Design", "AI", "ML", "Big Data"] },
     "CSE[DS]": { 
@@ -313,32 +313,32 @@
       TY: ["AI", "IS", "ML-II", "DC"], 
       LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Computing"] },
     "AIML": { 
-      SY: ["DSA", "Python", "Linear Algebra", "Probability & Stats"], 
+      SY: ["DSA", "OS", "LAOT", "DBMS"], 
       TY: ["DBMS", "ML", "OS", "Computer Networks"], 
       LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
     "AIDS": { 
-      SY: ["DSA", "Maths for DS", "Python", "Statistics"], 
+      SY: ["DSA", "OS", "Python", "Statistics"], 
       TY: ["DBMS", "ML", "Data Visualization", "OS"], 
       LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
     "IT": { 
-      SY: ["DSA", "Web Tech", "OOP", "COA"], 
+      SY: ["DSA", "OS", "OOP", "COA"], 
       TY: ["DBMS", "OS", "CN", "SEPM"], 
       LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
     "Electrical": { 
-      SY: ["Electrical Circuits", "Electromagnetics", "Analog Electronics", "Maths III"], 
+      SY: ["Electrical Circuits", "Electromagnetics", "Analog Electronics", "EMEE"], 
       TY: ["EM-II", "PSA", "EME", "ET&U", "IOT & IAEE"], 
       LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
     "Civil": { 
-      SY: ["Structural Analysis", "Building Materials", "Surveying", "Fluid Mechanics"], 
+      SY: ["MCE", "MOS", "CT", "Fluid Mechanics"], 
       TY: ["RCC Design", "Geotechnical Engg.", "Transportation Engg.", "Water Resources"], 
       LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
     "Mechanical": { 
-      SY: ["Engineering Thermodynamics", "Fluid Mechanics", "Strength of Materials", "Machine Drawing"], 
+      SY: ["AT", "MP", "Strength of Materials", "Machine Drawing"], 
       TY: ["IEC", "RES", "HT", "MV", "APM"], 
       LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
     "E&TC": { 
-      SY: ["Electronic Devices", "Digital Electronics", "Signals & Systems", "Control Systems", "VLSI Design"], 
-      TY: ["OS", "M&M", "DSP", "DSA"],
+      SY: ["EDC", "Digital Electronics", "Signals & Systems", "Maths III"], 
+      TY: ["OS", "M&M", "DSP", "DSA"], 
       LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"] }
   };
 
@@ -459,6 +459,7 @@
   </script>
 </body>
 </html>
+
 
 
 
