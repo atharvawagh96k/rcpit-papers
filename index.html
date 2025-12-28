@@ -3,237 +3,459 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RCPIT | Question Paper Portal</title>
+  <title>Question Paper Selector</title>
   <style>
-    /* ... (Your existing styles remain exactly the same) ... */
-    :root { --bg: #f7eae0; --blue: #0a57b5; --blue-hover: #0c62c9; --text: #0b2740; --input-bg: #fff; --input-border: #ddd; --error-red: #d9534f; --card-bg: #fff; }
-    body.dark { --bg: #1e1e1e; --text: #eee; --input-bg: #333; --input-border: #444; --blue: #4a90e2; --blue-hover: #5aa1f3; --card-bg: #2d2d2d; }
+    :root {
+      --bg: #f7eae0;
+      --blue: #0a57b5;
+      --blue-hover: #0c62c9;
+      --text: #0b2740;
+      --input-bg: #fff;
+      --input-border: #ddd;
+      --error-red: #d9534f;
+    }
+
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 'Inter', system-ui, sans-serif; transition: background 0.3s, color 0.3s; }
-    .wrapper { min-height: 100dvh; display: grid; place-items: center; padding: 32px 16px; }
-    .card { width: min(450px, 92vw); display: none; flex-direction: column; gap: 16px; background: var(--card-bg); border-radius: 18px; padding: 24px; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1); }
-    .breadcrumbs { font-size: 13px; margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 4px; color: var(--blue); font-weight: 500; }
-    .breadcrumbs span::after { content: ' ›'; color: var(--text); opacity: 0.5; margin-left: 4px; }
-    .breadcrumbs span:last-child { color: var(--text); opacity: 0.7; }
-    .breadcrumbs span:last-child::after { content: ''; }
-    h1 { margin: 0; font-weight: 700; font-size: 24px; text-align: center; }
-    p.subtitle { margin: 0; text-align: center; opacity: .8; font-size: 14px; }
-    .input-group input, .search-box { padding: 14px; border-radius: 10px; border: 1px solid var(--input-border); background-color: var(--input-bg); font-size: 16px; color: var(--text); width: 100%; }
-    .option { display: block; background: var(--blue); color: #fff; padding: 16px; border-radius: 14px; text-align: center; font-weight: 600; cursor: pointer; border: none; transition: transform .08s ease, background .15s ease; text-decoration: none; margin-bottom: 10px; width: 100%; }
-    .option:hover { background: var(--blue-hover); transform: translateY(-1px); }
-    .btn-back { background: #6c757d; margin-top: 8px; }
-    #subjectList, #paperTypeButtons { display: flex; flex-direction: column; gap: 10px; }
-    .dark-toggle { position: fixed; top: 10px; right: 10px; background: var(--blue); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; z-index: 1000; }
-    .logo-container { display: flex; justify-content: center; margin-bottom: 10px; }
-    .logo { width: 100px; height: auto; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.5 'Inter', system-ui, sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .wrapper {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 32px 16px;
+    }
+
+    .card {
+      width: min(400px, 92vw);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+      background: #fff;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-weight: 700;
+      font-size: clamp(20px, 3vw, 28px);
+      text-align: center;
+    }
+
+    p.subtitle {
+      margin: 0 0 20px 0;
+      text-align: center;
+      opacity: .8;
+      font-size: 14px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    .input-group label {
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text);
+      opacity: .9;
+    }
+
+    .input-group input {
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--input-border);
+      background-color: var(--input-bg);
+      font-size: 16px;
+      color: var(--text);
+      transition: border-color .15s ease;
+      width: 100%;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(10, 87, 181, .2);
+    }
+
+    #togglePassword {
+      position: absolute;
+      right: 12px;
+      top: 36px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0;
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    #togglePassword:hover { opacity: 1; }
+
+    .option {
+      display: block;
+      background: var(--blue);
+      color: #fff;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: .2px;
+      box-shadow: 0 4px 10px rgba(10, 87, 181, .15);
+      transition: transform .08s ease, box-shadow .2s ease, background .15s ease;
+      user-select: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    .option:hover {
+      background: var(--blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(10, 87, 181, .18);
+    }
+
+    .option:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(10, 87, 181, .12);
+    }
+
+    .muted {
+      opacity: .8;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .error-message {
+      padding: 10px;
+      background-color: #ffe0e0;
+      color: var(--error-red);
+      border: 1px solid var(--error-red);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: -8px;
+    }
+
+    #subjectList {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+    }
+
+    #paperTypeButtons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #eee;
+      --input-bg: #333;
+      --input-border: #444;
+      --blue: #4a90e2;
+      --blue-hover: #5aa1f3;
+    }
+
+    body.dark .card {
+      background: #2d2d2d;
+      color: #eee;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    .dark-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
   <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">🌓</button>
-  
   <main class="wrapper">
+
+    <!-- LOGIN PAGE -->
     <section class="card" id="loginPage">
-      <div class="logo-container"><img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="Logo" class="logo"></div>
+      <div class="logo-container">
+        <img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="RCPIT Logo" class="logo">
+      </div>
       <h1>Welcome Back</h1>
       <p class="subtitle">Please sign in to continue</p>
-      <form id="loginForm" style="display:flex; flex-direction:column; gap:16px;">
-        <input type="text" id="username" class="search-box" placeholder="User ID" required>
-        <input type="password" id="password" class="search-box" placeholder="Password" required>
+      <form id="loginForm" style="display:flex;flex-direction:column;gap:16px;">
+        <div class="input-group">
+          <label for="username">User ID</label>
+          <input type="text" id="username" placeholder="Enter your PRN or Email" required>
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <button type="button" id="togglePassword">🔓</button>
+        </div>
+        <p id="loginError" class="error-message" style="display:none;">Invalid credentials! Try user: admin, pass: 1234.</p>
         <button type="submit" class="option">Sign In</button>
-        <p id="loginError" style="color:var(--error-red); display:none; text-align:center;">Invalid credentials!</p>
       </form>
     </section>
 
-    <section class="card" id="branchPage">
-      <h1>Select Branch</h1>
-      <div id="branchButtons"></div>
+    <!-- BRANCH PAGE -->
+    <section class="card" id="branchPage" style="display:none">
+      <h1>Select Your Branch</h1>
+      <button class="option" data-branch="First Year">First Year</button>
+      <button class="option" data-branch="CS&E">CS&E</button>
+      <button class="option" data-branch="CSE[DS]">CSE[DS]</button>
+      <button class="option" data-branch="AIML">AIML</button>
+      <button class="option" data-branch="AIDS">AIDS</button>
+      <button class="option" data-branch="IT">IT</button>
+      <button class="option" data-branch="Electrical">Electrical</button>
+      <button class="option" data-branch="Civil">Civil</button>
+      <button class="option" data-branch="Mechanical">Mechanical</button>
+      <button class="option" data-branch="E&TC">E&TC</button>
     </section>
 
-    <section class="card" id="studyPage">
-      <div class="breadcrumbs" id="bc-study"></div>
+    <!-- STUDY YEAR PAGE -->
+    <section class="card" id="studyPage" style="display:none">
       <h1 id="branchTitle"></h1>
-      <div id="studyYearButtons"></div>
-      <button class="option btn-back" onclick="showPage('branchPage')">⬅ Back</button>
+      <p class="subtitle">Select Study Year</p>
+      <button class="option" data-study="SY">Second Year (SY)</button>
+      <button class="option" data-study="TY">Third Year (TY)</button>
+      <button class="option" data-study="LY">Last Year (LY)</button>
+      <button class="option" id="backBranch">⬅ Back to Branch</button>
     </section>
 
-    <section class="card" id="yearPage">
-      <div class="breadcrumbs" id="bc-year"></div>
+    <!-- ACADEMIC YEAR PAGE -->
+    <section class="card" id="yearPage" style="display:none">
       <h1 id="yearTitle"></h1>
-      <div id="academicYearButtons"></div>
-      <button class="option btn-back" onclick="handleBackFromYear()">⬅ Back</button>
+      <p class="subtitle">Select Academic Year</p>
+      <button class="option" data-year="2025-26">2025-26</button>
+      <button class="option" data-year="2024-25">2024-25</button>
+      <button class="option" data-year="2023-24">2023-24</button>
+      <button class="option" data-year="2022-23">2022-23</button>
+      <button class="option" id="backStudy">⬅ Back</button>
     </section>
 
-    <section class="card" id="subjectPage">
-      <div class="breadcrumbs" id="bc-subject"></div>
+    <!-- SUBJECT PAGE -->
+    <section class="card" id="subjectPage" style="display:none">
       <h1 id="subjectTitle"></h1>
-      <input type="text" id="subjectSearch" class="search-box" placeholder="Search..." oninput="filterSubjects()">
-      <div id="subjectList" style="margin-top:10px;"></div>
-      <button class="option btn-back" onclick="showPage('yearPage')">⬅ Back</button>
+      <p class="subtitle">Select Subject</p>
+      <div id="subjectList"></div>
+      <button class="option" id="backYear">⬅ Back to Academic Year</button>
     </section>
 
-    <section class="card" id="paperTypePage">
-      <div class="breadcrumbs" id="bc-paper"></div>
-      <h1>Select Paper</h1>
-      <p class="subtitle" id="paperTypeSubtitle"></p>
-      <div id="paperTypeButtons" style="margin-top:10px;"></div>
-      <button class="option btn-back" onclick="showPage('subjectPage')">⬅ Back</button>
+    <!-- PAPER TYPE PAGE -->
+    <section class="card" id="paperTypePage" style="display:none">
+      <h1>Select Paper Type</h1>
+      <p class="subtitle" id="paperTypeSubtitle">Click a button below to open the corresponding PDF file.</p>
+      <div id="paperTypeButtons"></div>
+      <button class="option" id="backToSubjects">⬅ Back to Subjects</button>
     </section>
   </main>
 
   <script>
-    // ✅ No Firebase Configuration Needed!
-    const subjects = {
-      "First Year": ["Chemistry", "Physics", "Mathematics I", "B.E.E.& D.E.", "Engineering Mechanics", "E.C.S.", "Mathematics II"],
-      "Computer Science & Engineering": { 
-        SY: ["DSA", "OOP", "Discrete Mathematics", "COA"], 
-        TY: ["DBMS", "OS", "Computer Networks", "Theory of Computation"], 
-        LY: ["Compiler Design", "AI", "ML", "Big Data"] },
-      "IT": { 
-        SY: ["DSA", "Web Tech", "OOP", "COA"], 
-        TY: ["DBMS", "OS", "CN", "SEPM"], 
-        LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
-      "E&TC": { 
-        SY: ["Electronic Devices", "Digital Electronics", "Signals & Systems", "Maths III"], 
-        TY: ["Microprocessors", "Communication Systems", "Control Systems", "VLSI Design"], 
-        LY: ["Embedded Systems", "Wireless Communication", "IoT", "Advanced VLSI"] }
-      // ... Add other branches here ...
-    };
+    const pages = ['loginPage','branchPage','studyPage','yearPage','subjectPage','paperTypePage']
+      .map(id=>document.getElementById(id));
 
-    let selections = { branch: '', study: '', year: '', subject: '' };
+    const loginForm=document.getElementById('loginForm');
+    const loginError=document.getElementById('loginError');
+    const username=document.getElementById('username');
+    const password=document.getElementById('password');
+    const togglePassword=document.getElementById('togglePassword');
 
-    function showPage(id) {
-      document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
-      document.getElementById(id).style.display = 'flex';
-      updateBreadcrumbs();
-    }
+    let selectedBranch='',selectedStudy='',selectedYear='',selectedSubject='',selectedPaperType='';
 
-    function updateBreadcrumbs() {
-      const crumbs = [
-        { id: 'bc-study', path: [selections.branch] },
-        { id: 'bc-year', path: [selections.branch, selections.study] },
-        { id: 'bc-subject', path: [selections.branch, selections.study, selections.year] },
-        { id: 'bc-paper', path: [selections.branch, selections.study, selections.year, selections.subject] }
-      ];
-      crumbs.forEach(c => {
-        const el = document.getElementById(c.id);
-        if (el) el.innerHTML = c.path.filter(x => x).map(p => `<span>${p}</span>`).join('');
-      });
-    }
+    const subjects={
+      "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "Engineering Mechanics", "E.C.S."],
+    "CS&E": { 
+      SY: ["DSA", "OOP", "Discrete Mathematics", "COA"], 
+      TY: ["DBMS", "OS", "Computer Networks", "Theory of Computation"], 
+      LY: ["Compiler Design", "AI", "ML", "Big Data"] },
+    "CSE[DS]": { 
+      SY: ["DSA", "DBS", "MIS", "CSF","SDS","FDA"], 
+      TY: ["DBMS", "ML Basics", "Data Visualization", "Probability Models"], 
+      LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Computing"] },
+    "AIML": { 
+      SY: ["DSA", "Python", "Linear Algebra", "Probability & Stats"], 
+      TY: ["DBMS", "ML", "OS", "Computer Networks"], 
+      LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
+    "AIDS": { 
+      SY: ["DSA", "Maths for DS", "Python", "Statistics"], 
+      TY: ["DBMS", "ML", "Data Visualization", "OS"], 
+      LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
+    "IT": { 
+      SY: ["DSA", "Web Tech", "OOP", "COA"], 
+      TY: ["DBMS", "OS", "CN", "SEPM"], 
+      LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
+    "Electrical": { 
+      SY: ["Electrical Circuits", "Electromagnetics", "Analog Electronics", "Maths III"], 
+      TY: ["Power Systems", "Control Systems", "Digital Electronics", "Signals & Systems"], 
+      LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
+    "Civil": { 
+      SY: ["Structural Analysis", "Building Materials", "Surveying", "Fluid Mechanics"], 
+      TY: ["RCC Design", "Geotechnical Engg.", "Transportation Engg.", "Water Resources"], 
+      LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
+    "Mechanical": { 
+      SY: ["Engineering Thermodynamics", "Fluid Mechanics", "Strength of Materials", "Machine Drawing"], 
+      TY: ["Theory of Machines", "Manufacturing Processes", "Heat Transfer", "Design of Machine Elements"], 
+      LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
+    "E&TC": { 
+      SY: ["Electronic Devices", "Digital Electronics", "Signals & Systems", "Maths III"], 
+      TY: ["Microprocessors", "Communication Systems", "Control Systems", "VLSI Design"], 
+      LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"] }
+  };
 
-    document.getElementById('loginForm').onsubmit = (e) => {
+    function showPage(page){pages.forEach(p=>p.style.display='none');page.style.display='flex';}
+
+    togglePassword.onclick=()=>{const t=password.type==='password'?'text':'password';password.type=t;togglePassword.textContent=t==='password'?'🔓':'🔒';};
+
+    loginForm.onsubmit=e=>{
       e.preventDefault();
-      if(document.getElementById('username').value === 'admin' && document.getElementById('password').value === '1234') {
-        renderBranches();
-        showPage('branchPage');
-      } else {
-        document.getElementById('loginError').style.display = 'block';
-      }
+      if(username.value==='admin'&&password.value==='1234'){showPage(document.getElementById('branchPage'));}
+      else loginError.style.display='block';
     };
 
-    function renderBranches() {
-      const container = document.getElementById('branchButtons');
-      container.innerHTML = '';
-      Object.keys(subjects).forEach(b => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = b;
-        btn.onclick = () => {
-          selections.branch = b;
-          if(b === 'First Year') {
-            selections.study = 'FY';
-            renderYears();
-            showPage('yearPage');
-          } else {
-            renderStudyYears();
-            showPage('studyPage');
-          }
+    document.querySelectorAll('#branchPage .option').forEach(btn=>{
+      btn.onclick=()=>{
+        selectedBranch=btn.dataset.branch;
+        if(selectedBranch==='First Year'){
+          selectedStudy='FY';
+          document.getElementById('yearTitle').textContent=`${selectedBranch} - Academic Year`;
+          showPage(document.getElementById('yearPage'));
+        }else{
+          document.getElementById('branchTitle').textContent=selectedBranch;
+          showPage(document.getElementById('studyPage'));
+        }
+      };
+    });
+
+    document.querySelectorAll('#studyPage .option[data-study]').forEach(btn=>{
+      btn.onclick=()=>{
+        selectedStudy=btn.dataset.study;
+        document.getElementById('yearTitle').textContent=`${selectedBranch} - ${selectedStudy} - Academic Year`;
+        showPage(document.getElementById('yearPage'));
+      };
+    });
+
+    const subjectList=document.getElementById('subjectList');
+
+    document.querySelectorAll('#yearPage .option[data-year]').forEach(btn=>{
+      btn.onclick=()=>{
+        selectedYear=btn.dataset.year;
+        subjectList.innerHTML='';
+        const display=(arr)=>{
+          arr.forEach(sub=>{
+            const b=document.createElement('button');
+            b.className='option';b.textContent=sub;
+            b.onclick=()=>{
+              selectedSubject=sub;
+              document.getElementById('paperTypeSubtitle').innerHTML=`<b>${selectedSubject}</b> papers for ${selectedBranch} ${selectedStudy} - ${selectedYear}`;
+              loadPaperTypes();
+              showPage(document.getElementById('paperTypePage'));
+            };
+            subjectList.appendChild(b);
+          });
         };
-        container.appendChild(btn);
-      });
-    }
+        if(selectedBranch==='First Year') display(subjects["First Year"]);
+        else display(subjects[selectedBranch]?.[selectedStudy]||[]);
+        document.getElementById('subjectTitle').textContent=`${selectedBranch} - ${selectedYear}`;
+        showPage(document.getElementById('subjectPage'));
+      };
+    });
 
-    function renderStudyYears() {
-      const container = document.getElementById('studyYearButtons');
-      container.innerHTML = '';
-      document.getElementById('branchTitle').textContent = selections.branch;
-      ['SY', 'TY', 'LY'].forEach(s => {
+    // ✅ UPDATED FUNCTION
+    function loadPaperTypes() {
+      const paperTypeButtons = document.getElementById('paperTypeButtons');
+      paperTypeButtons.innerHTML = '';
+
+      const fyPapers = [
+        { label: "TT-I (Terminal Test I) Group - A", type: "TT-I-A" },
+        { label: "TT-II (Terminal Test II) Group - A", type: "TT-II-A" },
+        { label: "End Semester Exam Group - A", type: "EndSem-A" },
+        { label: "Re-End Semester Exam Group - A", type: "ReEndSem-A" },
+        { label: "TT-I (Terminal Test I) Group - B", type: "TT-I-B" },
+        { label: "TT-II (Terminal Test II) Group - B", type: "TT-II-B" },
+        { label: "End Semester Exam Group - B", type: "EndSem-B" },
+        { label: "Re-End Semester Exam Group - B", type: "ReEndSem-B" }
+      ];
+
+      const otherPapers = [
+        { label: "TT-I (Terminal Test I)", type: "TT-I" },       
+        { label: "TT-II (Terminal Test II)", type: "TT-II" },
+        { label: "End Semester Exam", type: "EndSemester" },
+        { label: "Re-End Semester Exam", type: "ReEndSemester" }
+      ];
+
+      // ✅ Choose FY or Other Branches
+      const papersToShow = selectedBranch === 'First Year' ? fyPapers : otherPapers;
+
+      // Render paper buttons dynamically
+      papersToShow.forEach(p => {
         const btn = document.createElement('button');
         btn.className = 'option';
-        btn.textContent = s;
-        btn.onclick = () => { selections.study = s; renderYears(); showPage('yearPage'); };
-        container.appendChild(btn);
+        btn.textContent = p.label;
+        btn.dataset.type = p.type;
+        btn.onclick = handlePaperClick;
+        paperTypeButtons.appendChild(btn);
       });
     }
 
-    function renderYears() {
-      const container = document.getElementById('academicYearButtons');
-      container.innerHTML = '';
-      document.getElementById('yearTitle').textContent = `${selections.branch} - ${selections.study}`;
-      ['2025-26', '2024-25', '2023-24'].forEach(y => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = y;
-        btn.onclick = () => { selections.year = y; renderSubjects(); showPage('subjectPage'); };
-        container.appendChild(btn);
-      });
-    }
-
-    function renderSubjects() {
-      const container = document.getElementById('subjectList');
-      container.innerHTML = '';
-      document.getElementById('subjectTitle').textContent = "Select Subject";
-      const list = selections.branch === 'First Year' ? subjects["First Year"] : (subjects[selections.branch][selections.study] || []);
-      list.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = s;
-        btn.onclick = () => { selections.subject = s; renderPaperTypes(); showPage('paperTypePage'); };
-        container.appendChild(btn);
-      });
-    }
-
-    function filterSubjects() {
-      const query = document.getElementById('subjectSearch').value.toLowerCase();
-      document.querySelectorAll('#subjectList .option').forEach(btn => {
-        btn.style.display = btn.textContent.toLowerCase().includes(query) ? 'block' : 'none';
-      });
-    }
-
-    function renderPaperTypes() {
-      const container = document.getElementById('paperTypeButtons');
-      container.innerHTML = '';
-      document.getElementById('paperTypeSubtitle').innerHTML = `Papers for <b>${selections.subject}</b>`;
-      
-      const types = selections.branch === 'First Year' ? 
-        [{l:"TT-I Group A", v:"TT-I-A"}, {l:"TT-II Group A", v:"TT-II-A"}, {l:"EndSem A", v:"EndSem-A"}, {l:"Re-EndSem A", v:"ReEndSem-A"}] :
-        [{l:"TT-I", v:"TT-I"}, {l:"TT-II", v:"TT-II"}, {l:"End Semester", v:"EndSemester"}, {l:"Re-End Semester", v:"ReEndSemester"}];
-
-      types.forEach(t => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = t.l;
-        btn.onclick = () => openFile(t.v);
-        container.appendChild(btn);
-      });
-    }
-
-    function openFile(type) {
+    // ✅ File opener logic
+    function handlePaperClick(e) {
+      selectedPaperType = e.target.dataset.type;
       const safe = s => s.replace(/[^a-zA-Z0-9]/g, '');
-      const fileName = `${safe(selections.branch)}-${safe(selections.study)}-${safe(selections.year)}-${safe(selections.subject)}-${safe(type)}.pdf`;
-      
-      // ✅ UPDATED: Look for file in the 'papers' folder
-      const url = `papers/${fileName}`;
-      
-      // Try to open it
-      window.open(url, '_blank');
+      const code = selectedBranch === 'First Year' ? 'FY' : selectedStudy;
+      const file = `${safe(selectedBranch)}-${safe(code)}-${safe(selectedYear)}-${safe(selectedSubject)}-${safe(selectedPaperType)}.pdf`;
+
+      window.open(`papers/${file}`, '_blank');
+      document.getElementById('paperTypeSubtitle').innerHTML = `Opening <b>${selectedPaperType}</b>... <br><span style="font-size:12px;opacity:0.7;">Check new tab.</span>`;
     }
 
-    function handleBackFromYear() {
-      if(selections.branch === 'First Year') showPage('branchPage');
-      else showPage('studyPage');
-    }
+    // ✅ Navigation buttons
+    document.getElementById('backBranch').onclick = () => showPage(document.getElementById('branchPage'));
+    document.getElementById('backStudy').onclick = () => selectedBranch === 'First Year' ? showPage(document.getElementById('branchPage')) : showPage(document.getElementById('studyPage'));
+    document.getElementById('backYear').onclick = () => showPage(document.getElementById('yearPage'));
+    document.getElementById('backToSubjects').onclick = () => showPage(document.getElementById('subjectPage'));
 
-    showPage('loginPage');
+    // ✅ Default page
+    showPage(document.getElementById('loginPage'));
   </script>
 </body>
 </html>
