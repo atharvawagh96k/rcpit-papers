@@ -303,44 +303,44 @@
 
     // DATA OBJECT
     const subjectsData = {
-    "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "Engineering Mechanics", "E.C.S."],
+  "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "EG", "CEM", "E.C.S."],
     "CS&E": { 
-      SY: ["DSA", "DBMS", "Discrete Mathematics", "COA"], 
-      TY: ["DBMS", "OS", "Computer Networks", "Theory of Computation"], 
+      SY: ["DS", "DBMS", "AOA", "CM", "CN", "COA"], 
+      TY: ["DBMS", "OS", "AA", "IOT", "CCN", "DWM", "AI", "ATCD"], 
       LY: ["Compiler Design", "AI", "ML", "Big Data"] },
     "CSE[DS]": { 
-      SY: ["DSA", "DBS", "MIS", "CSF","SDS","FDA"], 
-      TY: ["AI", "IS", "ML-II", "DC"], 
-      LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Computing"] },
+      SY: ["DS", "DBS", "MIS", "CSF","SDS","FDA"], 
+      TY: ["AI", "IS", "ML-II", "CCN", "DC"], 
+      LY: ["ACL", "Big Data Analytics", "AI", "Cloud Computing"] },
     "AIML": { 
-      SY: ["DSA", "OS", "LAOT", "DBMS"], 
-      TY: ["DBMS", "ML", "OS", "Computer Networks"], 
+      SY: ["DS", "OS", "LAOT", "DBMS"], 
+      TY: ["DBMS", "ML", "OS", "CN", "IPCV"], 
       LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
     "AIDS": { 
-      SY: ["DSA", "OS", "Python", "Statistics"], 
-      TY: ["DBMS", "ML", "Data Visualization", "OS"], 
+      SY: ["DS", "OS", "LOAT", "DBMS", "Statistics"], 
+      TY: ["DBMS", "ML", "IPCV", "OS"], 
       LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
     "IT": { 
-      SY: ["DSA", "OS", "OOP", "COA"], 
+      SY: ["DS", "OS", "OOP", "DBMS", "COA"], 
       TY: ["DBMS", "OS", "CN", "SEPM"], 
       LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
     "Electrical": { 
-      SY: ["Electrical Circuits", "Electromagnetics", "Analog Electronics", "EMEE"], 
-      TY: ["EM-II", "PSA", "EME", "ET&U", "IOT & IAEE"], 
+      SY: ["EMI", "Electromagnetics", "Analog Electronics", "EMEE"], 
+      TY: ["EM-II", "IEE", "CS", "DBMS", "EME", "PS-II", "ET&U", "IOT & IAEE"], 
       LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
     "Civil": { 
-      SY: ["MCE", "MOS", "CT", "Fluid Mechanics"], 
-      TY: ["RCC Design", "Geotechnical Engg.", "Transportation Engg.", "Water Resources"], 
+      SY: ["MCE", "MOS", "IPRP", "CT", "AC"], 
+      TY: ["TOS", "TE", "DCS", "EG", "HFM"], 
       LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
-    "Mechanical": { 
-      SY: ["AT", "MP", "Strength of Materials", "Machine Drawing"], 
-      TY: ["IEC", "RES", "HT", "MV", "APM"], 
+    "Mechanical": {
+      SY: ["AT", "MP", "AMP", "EM", "MME"], 
+      TY: ["IEC", "RES", "IE", "HT", "MV", "TOM", "FMM", "MMM", "APM"], 
       LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
     "E&TC": { 
-      SY: ["EDC", "Digital Electronics", "Signals & Systems", "Maths III"], 
-      TY: ["OS", "M&M", "DSP", "DSA"], 
-      LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"] }
-    };
+      SY: ["EDC", "MTE", "Signals & Systems", "Maths III"], 
+      TY: ["OS", "MM", "CS", "DBMS", "DSP", "CN", "SA", "ADC"], 
+      LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"]  }
+  };
 
     function showPage(page){pages.forEach(p=>p.style.display='none');page.style.display='flex';}
 
@@ -459,4 +459,5 @@
   </script>
 </body>
 </html>
+
 
