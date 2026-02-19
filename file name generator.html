@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RCPIT Filename Generator Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f7eae0; padding: 20px; color: #0b2740; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0;}
+    .card { background: white; padding: 30px; border-radius: 18px; width: 100%; max-width: 450px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #0a57b5; margin-top: 0; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #555; }
+    select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; outline: none; background: #fff; cursor: pointer;}
+    select:focus { border-color: #0a57b5; box-shadow: 0 0 0 3px rgba(10, 87, 181, 0.1); }
+    
+    .result-box { 
+      background: #f0f7ff; 
+      padding: 15px; 
+      border-radius: 10px; 
+      border: 2px dashed #0a57b5; 
+      margin-top: 25px; 
+      text-align: center; 
+      position: relative;
+    }
+    
+    #display { 
+      font-family: 'Courier New', monospace; 
+      font-weight: bold; 
+      font-size: 14px; 
+      color: #0a57b5; 
+      word-break: break-all; 
+    }
+    
+    .copy-btn { 
+      background: #0a57b5; 
+      color: white; 
+      border: none; 
+      padding: 14px; 
+      width: 100%; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      margin-top: 15px; 
+      font-weight: 600; 
+      font-size: 16px; 
+      transition: 0.2s; 
+    }
+    .copy-btn:hover { background: #0c62c9; transform: translateY(-1px); }
+    .copy-btn:active { transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Filename Generator</h2>
+  <p style="font-size: 13px; text-align: center; opacity: 0.7; margin-bottom: 25px;">Select options to generate the correct PDF filename.</p>
+  
+  <div class="input-group">
+    <label>1. Select Branch</label>
+    <select id="branch" onchange="updateSubjects()">
+      <option value="First Year">First Year</option>
+      <option value="CS&E">CS&E</option>
+      <option value="CSE[DS]">CSE[DS]</option>
+      <option value="AIML">AIML</option>
+      <option value="AIDS">AIDS</option>
+      <option value="IT">IT</option>
+      <option value="Electrical">Electrical</option>
+      <option value="Civil">Civil</option>
+      <option value="Mechanical">Mechanical</option>
+      <option value="E&TC">E&TC</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label>2. Study Year</label>
+    <select id="study" onchange="updateSubjects()">
+      <option value="SY">Second Year (SY)</option>
+      <option value="TY">Third Year (TY)</option>
+      <option value="LY">Last Year (LY)</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label>3. Academic Year</label>
+    <select id="year" onchange="generate()">
+      <option value="2025-26">2025-26</option>
+      <option value="2024-25">2024-25</option>
+      <option value="2023-24">2023-24</option>
+      <option value="2022-23">2022-23</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label>4. Subject Name</label>
+    <select id="subject" onchange="generate()">
+      </select>
+  </div>
+
+  <div class="input-group">
+    <label>5. Paper Type</label>
+    <select id="type" onchange="generate()">
+      </select>
+  </div>
+
+  <div class="result-box">
+    <span style="font-size:10px; text-transform:uppercase; color:#888; letter-spacing:1px; display:block; margin-bottom:5px;">Result</span>
+    <div id="display">---</div>
+  </div>
+  
+  <button class="copy-btn" onclick="copyName()">Copy Filename</button>
+</div>
+
+<script>
+  // Complete subject data matching your main website portal
+  const subjectsData = {
+    "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "EG", "CEM", "E.C.S."],
+    "CS&E": { 
+      SY: ["DS", "DBMS", "AOA", "CM", "CN", "COA"], 
+      TY: ["DBMS", "OS", "AA", "IOT", "CCN", "DWM", "AI", "ATCD"], 
+      LY: ["Compiler Design", "AI", "ML", "Big Data"] },
+    "CSE[DS]": { 
+      SY: ["DS", "DBS", "MIS", "CSF","SDS","FDA"], 
+      TY: ["AI", "IS", "ML-II", "CCN", "DC"], 
+      LY: ["ACL", "Big Data Analytics", "AI", "Cloud Computing"] },
+    "AIML": { 
+      SY: ["DS", "OS", "LAOT", "DBMS"], 
+      TY: ["DBMS", "ML", "OS", "CN", "IPCV"], 
+      LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
+    "AIDS": { 
+      SY: ["DS", "OS", "LOAT", "DBMS", "Statistics"], 
+      TY: ["DBMS", "ML", "IPCV", "OS"], 
+      LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
+    "IT": { 
+      SY: ["DS", "OS", "OOP", "DBMS", "COA"], 
+      TY: ["DBMS", "OS", "CN", "SEPM"], 
+      LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
+    "Electrical": { 
+      SY: ["EMI", "Electromagnetics", "Analog Electronics", "EMEE"], 
+      TY: ["EM-II", "IEE", "CS", "DBMS", "EME", "PS-II", "ET&U", "IOT & IAEE"], 
+      LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
+    "Civil": { 
+      SY: ["MCE", "MOS", "IPRP", "CT", "AC"], 
+      TY: ["TOS", "TE", "DCS", "EG", "HFM"], 
+      LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
+    "Mechanical": {
+      SY: ["AT", "MP", "AMP", "EM", "MME"], 
+      TY: ["IEC", "RES", "IE", "HT", "MV", "TOM", "FMM", "MMM", "APM"], 
+      LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
+    "E&TC": { 
+      SY: ["EDC", "MTE", "Signals & Systems", "Maths III"], 
+      TY: ["OS", "MM", "CS", "DBMS", "DSP", "CN", "SA", "ADC"], 
+      LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"]  }
+  };
+
+  function updateSubjects() {
+    const branch = document.getElementById('branch').value;
+    const studySelect = document.getElementById('study');
+    
+    // Logic: If First Year is selected, force Study Year to 'FY' internally but hide/disable the dropdown visually if you want.
+    // For this tool, I will just disable the Study Year dropdown when FY is selected.
+    if (branch === "First Year") {
+      studySelect.innerHTML = '<option value="FY">First Year (FY)</option>';
+      studySelect.disabled = true;
+    } else {
+        // Restore SY/TY/LY options if coming back from FY
+        if(studySelect.options[0].value === 'FY') {
+            studySelect.innerHTML = `
+              <option value="SY">Second Year (SY)</option>
+              <option value="TY">Third Year (TY)</option>
+              <option value="LY">Last Year (LY)</option>
+            `;
+            studySelect.disabled = false;
+        }
+    }
+
+    const study = studySelect.value;
+    const subDropdown = document.getElementById('subject');
+    const typeDropdown = document.getElementById('type');
+    
+    // Clear previous options
+    subDropdown.innerHTML = '';
+    typeDropdown.innerHTML = '';
+
+    // Get List
+    let list = [];
+    if (branch === "First Year") {
+        list = subjectsData["First Year"];
+    } else {
+        list = subjectsData[branch] ? subjectsData[branch][study] || [] : [];
+    }
+    
+    // Populate Subject dropdown
+    list.forEach(s => {
+      let opt = document.createElement('option');
+      opt.value = s; opt.innerHTML = s;
+      subDropdown.appendChild(opt);
+    });
+
+    // Populate Paper Types (FY has Groups A/B, others do not)
+    const types = (branch === "First Year") ? 
+      [
+        {val: "TT-I-A", txt: "TT-I Group A"}, 
+        {val: "TT-II-A", txt: "TT-II Group A"}, 
+        {val: "EndSem-A", txt: "End Sem Group A"}, 
+        {val: "ReEndSem-A", txt: "Re-End Sem Group A"}, 
+        {val: "TT-I-B", txt: "TT-I Group B"}, 
+        {val: "TT-II-B", txt: "TT-II Group B"}, 
+        {val: "EndSem-B", txt: "End Sem Group B"}, 
+        {val: "ReEndSem-B", txt: "Re-End Sem Group B"}
+      ] :
+      [
+        {val: "TT-I", txt: "TT-I"}, 
+        {val: "TT-II", txt: "TT-II"}, 
+        {val: "EndSemester", txt: "End Sem"}, 
+        {val: "ReEndSemester", txt: "Re-End Sem"}
+      ];
+
+    types.forEach(t => {
+      let opt = document.createElement('option');
+      opt.value = t.val; opt.innerHTML = t.txt;
+      typeDropdown.appendChild(opt);
+    });
+
+    generate();
+  }
+
+  function generate() {
+    // Replicate the 'safe' logic EXACTLY from your portal code
+    const safe = s => s.replace(/[^a-zA-Z0-9]/g, '');
+    
+    const branchVal = document.getElementById('branch').value;
+    const studyVal = document.getElementById('study').value;
+    const yearVal = document.getElementById('year').value;
+    const subVal = document.getElementById('subject').value;
+    const typeVal = document.getElementById('type').value;
+
+    const b = safe(branchVal);
+    const s = safe(studyVal);
+    const y = safe(yearVal);
+    const sub = safe(subVal);
+    const t = safe(typeVal);
+
+    // .pdf extension is added automatically
+    const fileName = `${b}-${s}-${y}-${sub}-${t}`;
+    document.getElementById('display').innerText = fileName;
+  }
+
+  function copyName() {
+    const text = document.getElementById('display').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      const originalText = btn.innerText;
+      btn.innerText = "Copied! ✅";
+      btn.style.background = "#28a745";
+      setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.background = "#0a57b5";
+      }, 1500);
+    });
+  }
+
+  // Run on first load
+  updateSubjects();
+</script>
+
+</body>
+</html>
