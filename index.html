@@ -1,247 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Question Paper Selector</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg: #f7eae0;
-      --blue: #0a57b5;
-      --blue-hover: #0c62c9;
-      --text: #0b2740;
-      --input-bg: #fff;
-      --input-border: #ddd;
-      --error-red: #d9534f;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Question Paper Selector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
+<style>
+:root {
+  --bg: #f7eae0;
+  --blue: #0a57b5;
+  --blue-hover: #0c62c9;
+  --blue-light: rgba(10, 87, 181, 0.08);
+  --text: #0b2740;
+  --text-muted: #5a7a9a;
+  --input-bg: #fff;
+  --input-border: #dde4ee;
+  --error-red: #d9534f;
+  --card-bg: #fff;
+  --shadow: 0 12px 40px rgba(11, 39, 64, 0.10);
+  --shadow-hover: 0 20px 50px rgba(11, 39, 64, 0.16);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif; /* Fixed font syntax */
-      transition: background 0.3s, color 0.3s;
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
 
-    .wrapper {
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: 32px 16px;
-    }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 400;
+  transition: background 0.3s, color 0.3s;
+  padding-bottom: 60px;
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(10,87,181,0.04) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(247,163,96,0.08) 0%, transparent 50%);
+  min-height: 100vh;
+}
 
-    .card {
-      width: min(400px, 92vw);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      align-items: stretch;
-      background: #fff;
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-      transition: background 0.3s, box-shadow 0.3s;
-    }
+.wrapper {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
 
-    h1 {
-      margin: 0 0 8px 0;
-      font-weight: 700;
-      font-size: clamp(20px, 3vw, 28px);
-      text-align: center;
-    }
+.card {
+  width: min(420px, 94vw);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.8);
+  transition: background 0.3s, box-shadow 0.3s;
+  animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1);
+}
 
-    p.subtitle {
-      margin: 0 0 20px 0;
-      text-align: center;
-      opacity: .8;
-      font-size: 14px;
-    }
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      position: relative;
-    }
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 30px);
+  text-align: center;
+  line-height: 1.2;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
 
-    .input-group label {
-      font-weight: 500;
-      font-size: 14px;
-      color: var(--text);
-      opacity: .9;
-    }
+p.subtitle {
+  text-align: center;
+  opacity: .65;
+  font-size: 13.5px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+  margin-top: -4px;
+}
 
-    .input-group input {
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid var(--input-border);
-      background-color: var(--input-bg);
-      font-size: 16px;
-      color: var(--text);
-      transition: border-color .15s ease;
-      width: 100%;
-    }
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--input-border), transparent);
+  margin: 2px 0;
+}
 
-    .input-group input:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 2px rgba(10, 87, 181, .2);
-    }
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+}
 
-    #togglePassword {
-      position: absolute;
-      right: 12px;
-      top: 36px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      padding: 0;
-      line-height: 1;
-      opacity: 0.7;
-      transition: opacity 0.15s;
-    }
+.input-group label {
+  font-weight: 500;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
 
-    #togglePassword:hover { opacity: 1; }
+.input-group input,
+.input-group select {
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--input-border);
+  background-color: var(--input-bg);
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  transition: border-color .2s ease, box-shadow .2s ease;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
 
-    .option {
-      display: block;
-      background: var(--blue);
-      color: #fff;
-      padding: 18px;
-      border-radius: 14px;
-      text-align: center;
-      font-weight: 600;
-      letter-spacing: .2px;
-      box-shadow: 0 4px 10px rgba(10, 87, 181, .15);
-      transition: transform .08s ease, box-shadow .2s ease, background .15s ease;
-      user-select: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      width: 100%;
-    }
+.input-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a7a9a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
 
-    .option:hover {
-      background: var(--blue-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(10, 87, 181, .18);
-    }
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(10, 87, 181, .12);
+}
 
-    .option:active {
-      transform: translateY(0);
-      box-shadow: 0 4px 10px rgba(10, 87, 181, .12);
-    }
+#togglePassword, #adminTogglePassword {
+  position: absolute;
+  right: 12px;
+  top: 34px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 4px;
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+#togglePassword:hover, #adminTogglePassword:hover { opacity: 1; }
 
-    .muted {
-      opacity: .8;
-      font-size: 13px;
-      text-align: center;
-    }
+/* Primary Button */
+.option {
+  display: block;
+  background: var(--blue);
+  color: #fff;
+  padding: 15px 18px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.1px;
+  box-shadow: 0 4px 14px rgba(10, 87, 181, .2);
+  transition: transform .1s ease, box-shadow .2s ease, background .15s ease;
+  user-select: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  width: 100%;
+}
 
-    .error-message {
-      padding: 10px;
-      background-color: #ffe0e0;
-      color: var(--error-red);
-      border: 1px solid var(--error-red);
-      border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: -8px;
-    }
+.option:hover {
+  background: var(--blue-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(10, 87, 181, .25);
+}
 
-    #subjectList {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 0;
-    }
+.option:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(10, 87, 181, .15);
+}
 
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 24px;
-    }
+.option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
 
-    .logo {
-      width: 120px;
-      height: auto;
-    }
+/* Secondary / ghost button */
+.option.secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--input-border);
+  box-shadow: none;
+  font-weight: 500;
+}
+.option.secondary:hover {
+  background: var(--blue-light);
+  color: var(--blue);
+  border-color: var(--blue);
+  box-shadow: none;
+}
 
-    #paperTypeButtons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+.muted {
+  opacity: .65;
+  font-size: 13px;
+  text-align: center;
+}
 
-    body.dark {
-      --bg: #1e1e1e;
-      --text: #eee;
-      --input-bg: #333;
-      --input-border: #444;
-      --blue: #4a90e2;
-      --blue-hover: #5aa1f3;
-    }
+.error-message {
+  padding: 10px 14px;
+  background-color: #fff2f2;
+  color: var(--error-red);
+  border: 1px solid #f5c6c6;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 500;
+}
 
-    body.dark .card {
-      background: #2d2d2d;
-      color: #eee;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
-    }
+.success-message {
+  padding: 10px 14px;
+  background-color: #edf9f0;
+  color: #1a7a3a;
+  border: 1px solid #b8e8c8;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 500;
+}
 
-    .dark-toggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: var(--blue);
-      color: white;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      z-index: 1000;
-    }
-  </style>
+#subjectList, #paperTypeButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Dark mode */
+body.dark {
+  --bg: #121a24;
+  --text: #e8edf5;
+  --text-muted: #7a99bb;
+  --input-bg: #1e2a38;
+  --input-border: #2c3e52;
+  --blue: #4a8fe8;
+  --blue-hover: #5aa1f9;
+  --blue-light: rgba(74,143,232,0.1);
+  --card-bg: #1a2536;
+  --shadow: 0 12px 40px rgba(0,0,0,0.35);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(74,143,232,0.06) 0%, transparent 60%);
+}
+
+body.dark .card {
+  border-color: rgba(255,255,255,0.05);
+}
+
+/* Dark toggle */
+.dark-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1.5px solid var(--input-border);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.2s;
+}
+.dark-toggle:hover { transform: scale(1.05); }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  font-size: 12.5px;
+  font-weight: 400;
+  background: var(--bg);
+  color: var(--text-muted);
+  border-top: 1px solid var(--input-border);
+  z-index: 100;
+  letter-spacing: 0.2px;
+}
+
+/* ─── ADMIN DASHBOARD ─── */
+#adminDashboard {
+  max-width: 480px;
+  gap: 16px;
+}
+
+#adminDashboard h1 {
+  font-size: 24px;
+  text-align: left;
+}
+
+#adminDashboard .subtitle {
+  text-align: left;
+  margin-top: 0;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 4px;
+}
+
+.admin-badge {
+  background: linear-gradient(135deg, #0a57b5, #1a7ad4);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.info-box {
+  background: linear-gradient(135deg, rgba(10,87,181,0.06), rgba(10,87,181,0.02));
+  border: 1px solid rgba(10,87,181,0.2);
+  color: var(--blue);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.info-box code {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 12px;
+  background: rgba(10,87,181,0.12);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* Generated filename display */
+.filename-display {
+  background: linear-gradient(135deg, var(--blue-light), rgba(10,87,181,0.03));
+  border: 1.5px dashed rgba(10,87,181,0.3);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filename-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.filename-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.filename-value {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* File select zone */
+.file-select-zone {
+  border: 2px dashed var(--input-border);
+  border-radius: var(--radius-sm);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.file-select-zone:hover,
+.file-select-zone.dragover {
+  border-color: var(--blue);
+  background: var(--blue-light);
+}
+
+.file-select-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.file-select-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.file-select-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blue);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.file-select-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
+
+/* Selected file preview */
+.file-preview {
+  display: none;
+  background: #edf9f0;
+  border: 1px solid #b8e8c8;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  align-items: center;
+  gap: 12px;
+}
+
+body.dark .file-preview {
+  background: rgba(26,122,58,0.1);
+  border-color: rgba(26,122,58,0.3);
+}
+
+.file-preview.visible { display: flex; }
+
+.file-preview-icon { font-size: 22px; flex-shrink: 0; }
+
+.file-preview-info { flex: 1; min-width: 0; }
+
+.file-preview-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a7a3a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-preview-size {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.file-preview-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.5;
+  padding: 4px;
+  border-radius: 6px;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.file-preview-remove:hover { opacity: 1; }
+
+/* Upload progress */
+.upload-progress {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.upload-progress.visible { display: flex; }
+
+.progress-bar-bg {
+  background: var(--input-border);
+  border-radius: 100px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), #4a9ef8);
+  border-radius: 100px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Upload button - special green */
+.upload-btn {
+  background: linear-gradient(135deg, #1a7a3a, #228b45);
+  box-shadow: 0 4px 14px rgba(26,122,58,0.25);
+}
+.upload-btn:hover {
+  background: linear-gradient(135deg, #228b45, #2da355);
+  box-shadow: 0 8px 22px rgba(26,122,58,0.3);
+}
+
+#adminLogoutBtn {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--input-border);
+  box-shadow: none;
+  font-weight: 500;
+}
+#adminLogoutBtn:hover {
+  background: rgba(217,83,79,0.08);
+  color: var(--error-red);
+  border-color: rgba(217,83,79,0.3);
+}
+
+/* Section label */
+.section-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--input-border);
+}
+
+/* Two column grid for dropdowns */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+</style>
 </head>
 <body>
   <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">🌓</button>
+  
   <main class="wrapper">
 
+    <!-- Student Login -->
     <section class="card" id="loginPage">
       <div class="logo-container">
         <img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="RCPIT Logo" class="logo">
       </div>
-      <h1>Welcome Back</h1>
-      <p class="subtitle">Please sign in to continue</p>
-      <form id="loginForm" style="display:flex;flex-direction:column;gap:16px;">
+      <h1>Student Login</h1>
+      <p class="subtitle">Previous Year Question Paper Archive Portal</p>
+      <div class="divider"></div>
+      
+      <form id="loginForm" style="display:flex;flex-direction:column;gap:14px;">
         <div class="input-group">
-          <label for="username">User ID</label>
-          <input type="text" id="username" placeholder="Enter your username" required>
+          <label for="username">PRN / User ID</label>
+          <input type="text" id="username" placeholder="Enter your PRN" required>
         </div>
         <div class="input-group">
           <label for="password">Password</label>
           <input type="password" id="password" placeholder="Enter your password" required>
           <button type="button" id="togglePassword">🔓</button>
         </div>
-        <p id="loginError" class="error-message" style="display:none;">Invalid credentials!</p>
-        <button type="submit" class="option">Sign In</button>
+        <p id="loginError" class="error-message" style="display:none;">Invalid credentials. Please try again.</p>
+        <button type="submit" class="option" style="margin-top:4px;">Sign In</button>
+        <button type="button" id="adminBtn" class="option secondary">Admin Portal →</button>
       </form>
     </section>
 
+    <!-- Admin Login -->
+    <section class="card" id="adminLoginPage" style="display:none">
+      <div class="logo-container">
+        <img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="RCPIT Logo" class="logo">
+      </div>
+      <h1>Admin Login</h1>
+      <p class="subtitle">Question Paper Management Portal</p>
+      <div class="divider"></div>
+
+      <form id="adminLoginForm" style="display:flex;flex-direction:column;gap:14px;">
+        <div class="input-group">
+          <label for="adminUsername">Admin ID</label>
+          <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+        </div>
+        <div class="input-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter password" required>
+          <button type="button" id="adminTogglePassword">🔓</button>
+        </div>
+        <p id="adminLoginError" class="error-message" style="display:none;">Invalid admin credentials.</p>
+        <button type="submit" class="option" style="margin-top:4px;">Sign In</button>
+        <button type="button" class="option secondary" id="backToStudentLogin">← Student Login</button>
+      </form>
+    </section>
+
+    <!-- Branch Selection -->
     <section class="card" id="branchPage" style="display:none">
-      <h1>Select Your Branch</h1>
+      <h1>Select Branch</h1>
+      <p class="subtitle">Choose your department to continue</p>
+      <div class="divider"></div>
       <button class="option" data-branch="First Year">First Year</button>
       <button class="option" data-branch="CS&E">CS&E</button>
       <button class="option" data-branch="CSE[DS]">CSE[DS]</button>
@@ -254,210 +643,487 @@
       <button class="option" data-branch="E&TC">E&TC</button>
     </section>
 
+    <!-- Study Year Selection -->
     <section class="card" id="studyPage" style="display:none">
       <h1 id="branchTitle"></h1>
       <p class="subtitle">Select Study Year</p>
+      <div class="divider"></div>
       <button class="option" data-study="SY">Second Year (SY)</button>
       <button class="option" data-study="TY">Third Year (TY)</button>
       <button class="option" data-study="LY">Last Year (LY)</button>
-      <button class="option" id="backBranch">⬅ Back to Branch</button>
+      <button class="option secondary" id="backBranch">← Back to Branch</button>
     </section>
 
+    <!-- Academic Year Selection -->
     <section class="card" id="yearPage" style="display:none">
       <h1 id="yearTitle"></h1>
       <p class="subtitle">Select Academic Year</p>
-      <button class="option" data-year="2025-26">2025-26</button>
-      <button class="option" data-year="2024-25">2024-25</button>
-      <button class="option" data-year="2023-24">2023-24</button>
-      <button class="option" data-year="2022-23">2022-23</button>
-      <button class="option" data-year="2019-20">2019-20</button>
-      <button class="option" id="backStudy">⬅ Back</button>
+      <div class="divider"></div>
+      <button class="option" data-year="2025-26">2025–26</button>
+      <button class="option" data-year="2024-25">2024–25</button>
+      <button class="option" data-year="2023-24">2023–24</button>
+      <button class="option secondary" id="backStudy">← Back</button>
     </section>
 
+    <!-- Subject Selection -->
     <section class="card" id="subjectPage" style="display:none">
       <h1 id="subjectTitle"></h1>
       <p class="subtitle">Select Subject</p>
+      <div class="divider"></div>
       <div id="subjectList"></div>
-      <button class="option" id="backYear">⬅ Back to Academic Year</button>
+      <button class="option secondary" id="backYear">← Back to Academic Year</button>
     </section>
 
+    <!-- Paper Type Selection -->
     <section class="card" id="paperTypePage" style="display:none">
       <h1>Select Paper Type</h1>
-      <p class="subtitle" id="paperTypeSubtitle">Click a button below to open the corresponding PDF file.</p>
+      <p class="subtitle" id="paperTypeSubtitle">Click a button below to open the PDF.</p>
+      <div class="divider"></div>
       <div id="paperTypeButtons"></div>
-      <button class="option" id="backToSubjects">⬅ Back to Subjects</button>
+      <button class="option secondary" id="backToSubjects">← Back to Subjects</button>
     </section>
+
+    <!-- ─── ADMIN DASHBOARD ─── -->
+    <section class="card" id="adminDashboard" style="display:none">
+
+      <div class="admin-header">
+        <h1 style="font-size:22px;">File Management</h1>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <p class="subtitle">Select a PDF, name it, then upload.</p>
+
+      <div class="divider"></div>
+
+      <!-- STEP 1: Select File (always visible) -->
+      <span class="section-label">Select PDF</span>
+
+      <!-- File drop zone -->
+      <div class="file-select-zone" id="fileDropZone">
+        <input type="file" id="pdfFileInput" accept=".pdf" />
+        <span class="file-select-icon">📂</span>
+        <span class="file-select-text">Select File</span>
+        <span class="file-select-hint">Click to browse or drag & drop a PDF</span>
+      </div>
+
+      <!-- File preview (hidden until file selected) -->
+      <div class="file-preview" id="filePreview">
+        <span class="file-preview-icon">📄</span>
+        <div class="file-preview-info">
+          <div class="file-preview-name" id="filePreviewName">—</div>
+          <div class="file-preview-size" id="filePreviewSize">—</div>
+        </div>
+        <button class="file-preview-remove" id="removeFileBtn" title="Remove file">✕</button>
+      </div>
+
+      <!-- STEP 2: Name Selection (hidden until file chosen) -->
+      <div id="namingSection" style="display:none; display:none; flex-direction:column; gap:14px;">
+
+        <div class="divider"></div>
+        <span class="section-label">Choose Name</span>
+
+        <div class="two-col">
+          <div class="input-group">
+            <label>Branch</label>
+            <select id="adminBranch">
+              <option value="First Year">First Year</option>
+              <option value="CS&E">CS&E</option>
+              <option value="CSE[DS]">CSE[DS]</option>
+              <option value="AIML">AIML</option>
+              <option value="AIDS">AIDS</option>
+              <option value="IT">IT</option>
+              <option value="Electrical">Electrical</option>
+              <option value="Civil">Civil</option>
+              <option value="Mechanical">Mechanical</option>
+              <option value="E&TC">E&TC</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Study Year</label>
+            <select id="adminStudy">
+              <option value="SY">SY</option>
+              <option value="TY">TY</option>
+              <option value="LY">LY</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="input-group">
+            <label>Academic Year</label>
+            <select id="adminYear">
+              <option value="2025-26">2025-26</option>
+              <option value="2024-25">2024-25</option>
+              <option value="2023-24">2023-24</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Paper Type</label>
+            <select id="adminType"></select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Subject</label>
+          <select id="adminSubject"></select>
+        </div>
+
+        <!-- Generated Filename -->
+        <div class="divider"></div>
+        <span class="section-label">Final Name</span>
+
+        <div class="filename-display">
+          <span class="filename-icon">🏷️</span>
+          <div>
+            <div class="filename-label">File will be saved as</div>
+            <div class="filename-value" id="adminDisplay">—</div>
+          </div>
+        </div>
+
+        <!-- Upload progress -->
+        <div class="upload-progress" id="uploadProgress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-label" id="progressLabel">Uploading…</div>
+        </div>
+
+        <p id="uploadStatus" class="success-message" style="display:none;"></p>
+
+        <!-- Upload button -->
+        <button class="option upload-btn" id="uploadBtn">⬆ Upload File</button>
+
+      </div>
+
+      <div class="divider"></div>
+      <button class="option" id="adminLogoutBtn">← Logout</button>
+    </section>
+
   </main>
 
   <script>
-    const pages = ['loginPage','branchPage','studyPage','yearPage','subjectPage','paperTypePage']
-      .map(id=>document.getElementById(id));
-
-    const loginForm=document.getElementById('loginForm');
-    const loginError=document.getElementById('loginError');
-    const username=document.getElementById('username');
-    const password=document.getElementById('password');
-    const togglePassword=document.getElementById('togglePassword');
-
-    let selectedBranch='',selectedStudy='',selectedYear='',selectedSubject='',selectedPaperType='';
-
-    // DATA OBJECT
     const subjectsData = {
-  "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "EG", "CEM", "E.C.S."],
-    "CS&E": { 
-      SY: ["DS", "DBMS", "AOA", "CM", "CN", "COA"], 
-      TY: ["DBMS", "OS", "AA", "IOT", "CCN", "DWM", "AI", "ATCD"], 
-      LY: ["Compiler Design", "AI", "ML", "Big Data"] },
-    "CSE[DS]": { 
-      SY: ["DS", "DBS", "MIS", "CSF","SDS","FDA"], 
-      TY: ["AI", "IS", "ML-II", "CCN", "DC"], 
-      LY: ["ACL", "Big Data Analytics", "AI", "Cloud Computing"] },
-    "AIML": { 
-      SY: ["DS", "OS", "LAOT", "DBMS"], 
-      TY: ["DBMS", "ML", "OS", "CN", "IPCV"], 
-      LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
-    "AIDS": { 
-      SY: ["DS", "OS", "LOAT", "DBMS", "Statistics"], 
-      TY: ["DBMS", "ML", "IPCV", "OS"], 
-      LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
-    "IT": { 
-      SY: ["DS", "OS", "OOP", "DBMS", "COA"], 
-      TY: ["DBMS", "OS", "CN", "SEPM"], 
-      LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
-    "Electrical": { 
-      SY: ["EMI", "Electromagnetics", "Analog Electronics", "EMEE"], 
-      TY: ["EM-II", "IEE", "CS", "DBMS", "EME", "PS-II", "ET&U", "IOT & IAEE"], 
-      LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
-    "Civil": { 
-      SY: ["MCE", "MOS", "IPRP", "CT", "AC"], 
-      TY: ["TOS", "TE", "DCS", "EG", "HFM"], 
-      LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
-    "Mechanical": {
-      SY: ["AT", "MP", "AMP", "EM", "MME"], 
-      TY: ["IEC", "RES", "IE", "HT", "MV", "TOM", "FMM", "MMM", "APM"], 
-      LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
-    "E&TC": { 
-      SY: ["EDC", "MTE", "Signals & Systems", "Maths III"], 
-      TY: ["OS", "MM", "CS", "DBMS", "DSP", "CN", "SA", "ADC"], 
-      LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"]  }
-  };
-
-    function showPage(page){pages.forEach(p=>p.style.display='none');page.style.display='flex';}
-
-    togglePassword.onclick=()=>{const t=password.type==='password'?'text':'password';password.type=t;togglePassword.textContent=t==='password'?'🔓':'🔒';};
-
-    loginForm.onsubmit=e=>{
-      e.preventDefault();
-      if(username.value==='admin'&&password.value==='1234'){showPage(document.getElementById('branchPage'));}
-      else loginError.style.display='block';
+      "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "EG", "CEM", "E.C.S."],
+      "CS&E": { SY: ["DS", "DBMS", "AOA", "CM", "CN", "ANT", "OS", "AI"], TY: ["DBMS", "OS", "AA", "IOT", "CCN", "DWM", "AI", "ATCD"], LY: ["Compiler Design", "AI", "ML", "Big Data"] },
+      "CSE[DS]": { SY: ["DS", "DBS", "MIS", "CSF", "SDS", "FDA"], TY: ["AI", "IS", "ML-II", "CCN", "DC"], LY: ["ACL", "Big Data Analytics", "AI", "Cloud Computing"] },
+      "AIML": { SY: ["DS", "OS", "LAOT", "DBMS"], TY: ["DBMS", "ML", "OS", "CN", "IPCV"], LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
+      "AIDS": { SY: ["DS", "PSI", "DAA", "AI", "OS", "LOAT", "DBMS"], TY: ["DBMS", "ML", "IPCV", "OS"], LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
+      "IT": { SY: ["DS", "OS", "OOP", "DBMS", "COA"], TY: ["DBMS", "OS", "CN", "SEPM"], LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
+      "Electrical": { SY: ["EMI", "Electromagnetics", "ADE", "EMEE"], TY: ["EM-II", "IEE", "CS", "DBMS", "EME", "PS-II", "ET&U", "IOT & IAEE"], LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
+      "Civil": { SY: ["MCE", "MOS", "IPRP", "CT", "AC"], TY: ["TOS", "TE", "DCS", "EG", "HFM"], LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
+      "Mechanical": { SY: ["AT", "MP", "AMP", "EM", "MME"], TY: ["IEC", "RES", "IE", "HT", "MV", "TOM", "FMM", "MMM", "APM"], LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
+      "E&TC": { SY: ["EDC", "DSD", "DSA", "IC", "MCA", "MTE", "SS", "Maths III"], TY: ["OS", "MM", "CS", "DBMS", "DSP", "CN", "SA", "ADC"], LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"] }
     };
 
-    document.querySelectorAll('#branchPage .option').forEach(btn=>{
-      btn.onclick=()=>{
-        selectedBranch=btn.dataset.branch;
-        if(selectedBranch==='First Year'){
-          selectedStudy='FY';
-          document.getElementById('yearTitle').textContent=`${selectedBranch} - Academic Year`;
-          showPage(document.getElementById('yearPage'));
-        }else{
-          document.getElementById('branchTitle').textContent=selectedBranch;
-          showPage(document.getElementById('studyPage'));
+    let selectedBranch = '', selectedStudy = '', selectedYear = '', selectedSubject = '';
+    let selectedFile = null;
+
+    function showPage(page) {
+      document.querySelectorAll('.card').forEach(p => p.style.display = 'none');
+      if (page) { page.style.display = 'flex'; page.style.animation = 'none'; requestAnimationFrame(() => { page.style.animation = ''; }); }
+    }
+
+    function sanitize(str) { return str.replace(/[^a-zA-Z0-9]/g, ''); }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(2) + ' MB';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Password toggles
+      function makeToggle(btnId, inputId) {
+        const btn = document.getElementById(btnId);
+        const inp = document.getElementById(inputId);
+        btn.onclick = () => { inp.type = inp.type === 'password' ? 'text' : 'password'; btn.textContent = inp.type === 'password' ? '🔓' : '🔒'; };
+      }
+      makeToggle('togglePassword', 'password');
+      makeToggle('adminTogglePassword', 'adminPassword');
+
+      // Student login
+      document.getElementById('loginForm').onsubmit = (e) => {
+        e.preventDefault();
+        const u = document.getElementById('username').value;
+        const p = document.getElementById('password').value;
+        if (u === 'student' && p === '1234') {
+          showPage(document.getElementById('branchPage'));
+        } else {
+          const err = document.getElementById('loginError');
+          err.style.display = 'block';
+          setTimeout(() => err.style.display = 'none', 3000);
         }
       };
-    });
 
-    document.querySelectorAll('#studyPage .option[data-study]').forEach(btn=>{
-      btn.onclick=()=>{
-        selectedStudy=btn.dataset.study;
-        document.getElementById('yearTitle').textContent=`${selectedBranch} - ${selectedStudy} - Academic Year`;
-        showPage(document.getElementById('yearPage'));
+      document.getElementById('adminBtn').onclick = () => showPage(document.getElementById('adminLoginPage'));
+      document.getElementById('backToStudentLogin').onclick = () => showPage(document.getElementById('loginPage'));
+
+      // Admin login
+      document.getElementById('adminLoginForm').onsubmit = (e) => {
+        e.preventDefault();
+        const u = document.getElementById('adminUsername').value;
+        const p = document.getElementById('adminPassword').value;
+        if (u === 'admin' && p === '1234') {
+          showPage(document.getElementById('adminDashboard'));
+          resetFileState();
+        } else {
+          const err = document.getElementById('adminLoginError');
+          err.style.display = 'block';
+          setTimeout(() => err.style.display = 'none', 3000);
+        }
       };
-    });
 
-    const subjectList=document.getElementById('subjectList');
-
-    document.querySelectorAll('#yearPage .option[data-year]').forEach(btn=>{
-      btn.onclick=()=>{
-        selectedYear=btn.dataset.year;
-        subjectList.innerHTML='';
-        const display=(arr)=>{
-          arr.forEach(sub=>{
-            const b=document.createElement('button');
-            b.className='option';b.textContent=sub;
-            b.onclick=()=>{
-              selectedSubject=sub;
-              document.getElementById('paperTypeSubtitle').innerHTML=`<b>${selectedSubject}</b> papers for ${selectedBranch} ${selectedStudy} - ${selectedYear}`;
-              loadPaperTypes();
-              showPage(document.getElementById('paperTypePage'));
-            };
-            subjectList.appendChild(b);
-          });
+      // Branch
+      document.querySelectorAll('#branchPage .option').forEach(btn => {
+        btn.onclick = () => {
+          selectedBranch = btn.dataset.branch;
+          if (selectedBranch === 'First Year') {
+            selectedStudy = 'FY';
+            document.getElementById('yearTitle').textContent = 'First Year (FY) — Academic Year';
+            showPage(document.getElementById('yearPage'));
+          } else {
+            document.getElementById('branchTitle').textContent = selectedBranch;
+            showPage(document.getElementById('studyPage'));
+          }
         };
-        // FIXED: Changed 'subjects' to 'subjectsData'
-        if(selectedBranch==='First Year') display(subjectsData["First Year"]);
-        else display(subjectsData[selectedBranch]?.[selectedStudy]||[]);
-        
-        document.getElementById('subjectTitle').textContent=`${selectedBranch} - ${selectedYear}`;
-        showPage(document.getElementById('subjectPage'));
+      });
+
+      document.querySelectorAll('#studyPage .option[data-study]').forEach(btn => {
+        btn.onclick = () => {
+          selectedStudy = btn.dataset.study;
+          document.getElementById('yearTitle').textContent = `${selectedBranch} · ${selectedStudy} — Academic Year`;
+          showPage(document.getElementById('yearPage'));
+        };
+      });
+
+      document.querySelectorAll('#yearPage .option[data-year]').forEach(btn => {
+        btn.onclick = () => { selectedYear = btn.dataset.year; loadSubjects(); };
+      });
+
+      document.getElementById('backBranch').onclick = () => showPage(document.getElementById('branchPage'));
+      document.getElementById('backStudy').onclick = () => selectedBranch === 'First Year' ? showPage(document.getElementById('branchPage')) : showPage(document.getElementById('studyPage'));
+      document.getElementById('backYear').onclick = () => showPage(document.getElementById('yearPage'));
+      document.getElementById('backToSubjects').onclick = () => showPage(document.getElementById('subjectPage'));
+
+      // Admin events
+      document.getElementById('adminBranch').addEventListener('change', handleAdminBranchChange);
+      document.getElementById('adminStudy').addEventListener('change', adminUpdateSubjects);
+      document.getElementById('adminYear').addEventListener('change', adminGenerate);
+      document.getElementById('adminSubject').addEventListener('change', adminGenerate);
+      document.getElementById('adminType').addEventListener('change', adminGenerate);
+
+      document.getElementById('adminLogoutBtn').onclick = () => {
+        resetFileState();
+        showPage(document.getElementById('loginPage'));
       };
+
+      // File input
+      const fileInput = document.getElementById('pdfFileInput');
+      const dropZone = document.getElementById('fileDropZone');
+
+      fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type === 'application/pdf') handleFileSelect(file);
+        else alert('Please select a valid PDF file.');
+      });
+
+      document.getElementById('removeFileBtn').onclick = () => resetFileState();
+
+      // Upload button
+      document.getElementById('uploadBtn').onclick = handleUpload;
+
+      showPage(document.getElementById('loginPage'));
     });
 
-    // Updated Function to load paper types
+    function handleFileSelect(file) {
+      if (!file) return;
+      if (file.type !== 'application/pdf') { alert('Please select a PDF file.'); return; }
+      selectedFile = file;
+
+      // Hide drop zone, show file preview
+      document.getElementById('fileDropZone').style.display = 'none';
+      const preview = document.getElementById('filePreview');
+      preview.classList.add('visible');
+      document.getElementById('filePreviewName').textContent = file.name;
+      document.getElementById('filePreviewSize').textContent = formatBytes(file.size);
+
+      // Reveal the naming + upload section with a smooth animation
+      const section = document.getElementById('namingSection');
+      section.style.display = 'flex';
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(10px)';
+      requestAnimationFrame(() => {
+        section.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+      });
+
+      document.getElementById('uploadStatus').style.display = 'none';
+
+      // Init admin dropdowns on first reveal
+      handleAdminBranchChange();
+    }
+
+    function resetFileState() {
+      selectedFile = null;
+      document.getElementById('pdfFileInput').value = '';
+      document.getElementById('fileDropZone').style.display = 'block';
+      document.getElementById('filePreview').classList.remove('visible');
+
+      // Hide naming section
+      const section = document.getElementById('namingSection');
+      section.style.display = 'none';
+      section.style.opacity = '0';
+
+      document.getElementById('uploadProgress').classList.remove('visible');
+      document.getElementById('uploadStatus').style.display = 'none';
+      document.getElementById('progressFill').style.width = '0%';
+
+      const btn = document.getElementById('uploadBtn');
+      btn.disabled = false;
+      btn.textContent = '⬆ Upload File';
+    }
+
+    function handleUpload() {
+      if (!selectedFile) return;
+      const filenameBase = document.getElementById('adminDisplay').textContent;
+      if (filenameBase === '---') { alert('Please select all paper details first.'); return; }
+
+      const targetFilename = filenameBase + '.pdf';
+      const btn = document.getElementById('uploadBtn');
+      btn.disabled = true;
+      btn.textContent = 'Uploading…';
+
+      const progress = document.getElementById('uploadProgress');
+      const fill = document.getElementById('progressFill');
+      const label = document.getElementById('progressLabel');
+      progress.classList.add('visible');
+
+      // Simulate upload progress (replace with real upload logic)
+      let pct = 0;
+      const interval = setInterval(() => {
+        pct += Math.random() * 18 + 5;
+        if (pct >= 100) { pct = 100; clearInterval(interval); finishUpload(targetFilename, btn, fill, label); }
+        fill.style.width = pct + '%';
+        label.textContent = `Uploading… ${Math.floor(pct)}%`;
+      }, 200);
+    }
+
+    function finishUpload(filename, btn, fill, label) {
+      fill.style.width = '100%';
+      label.textContent = 'Upload complete!';
+      btn.textContent = '✅ Uploaded';
+
+      const status = document.getElementById('uploadStatus');
+      status.textContent = `✅ "${filename}" has been successfully uploaded to papers/.`;
+      status.style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('uploadProgress').classList.remove('visible');
+        fill.style.width = '0%';
+        resetFileState();
+      }, 3500);
+    }
+
+    function loadSubjects() {
+      const list = document.getElementById('subjectList');
+      list.innerHTML = '';
+      let subjects = selectedBranch === 'First Year' ? subjectsData["First Year"] : (subjectsData[selectedBranch]?.[selectedStudy] || []);
+      subjects.forEach(sub => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = sub;
+        btn.onclick = () => {
+          selectedSubject = sub;
+          document.getElementById('paperTypeSubtitle').innerHTML = `<b>${selectedSubject}</b> · ${selectedBranch} ${selectedStudy} · ${selectedYear}`;
+          loadPaperTypes();
+          showPage(document.getElementById('paperTypePage'));
+        };
+        list.appendChild(btn);
+      });
+      document.getElementById('subjectTitle').textContent = `${selectedBranch} · ${selectedYear}`;
+      showPage(document.getElementById('subjectPage'));
+    }
+
     function loadPaperTypes() {
-      const paperTypeButtons = document.getElementById('paperTypeButtons');
-      paperTypeButtons.innerHTML = '';
-
+      const container = document.getElementById('paperTypeButtons');
+      container.innerHTML = '';
       const fyPapers = [
-        { label: "TT-I (Terminal Test I) Group - A", type: "TT-I-A" },
-        { label: "TT-II (Terminal Test II) Group - A", type: "TT-II-A" },
-        { label: "End Semester Exam Group - A", type: "EndSem-A" },
-        { label: "Re-End Semester Exam Group - A", type: "ReEndSem-A" },
-        { label: "TT-I (Terminal Test I) Group - B", type: "TT-I-B" },
-        { label: "TT-II (Terminal Test II) Group - B", type: "TT-II-B" },
-        { label: "End Semester Exam Group - B", type: "EndSem-B" },
-        { label: "Re-End Semester Exam Group - B", type: "ReEndSem-B" }
+        { label: "TT-I Group-A", type: "TT-I-A" }, { label: "TT-II Group-A", type: "TT-II-A" },
+        { label: "End Sem Group-A", type: "EndSem-A" }, { label: "Re-End Sem Group-A", type: "ReEndSem-A" },
+        { label: "TT-I Group-B", type: "TT-I-B" }, { label: "TT-II Group-B", type: "TT-II-B" },
+        { label: "End Sem Group-B", type: "EndSem-B" }, { label: "Re-End Sem Group-B", type: "ReEndSem-B" }
       ];
-
       const otherPapers = [
-        { label: "TT-I (Terminal Test I)", type: "TT-I" },        
-        { label: "TT-II (Terminal Test II)", type: "TT-II" },
-        { label: "End Semester Exam", type: "EndSemester" },
-        { label: "Re-End Semester Exam", type: "ReEndSemester" }
+        { label: "TT-I", type: "TT-I" }, { label: "TT-II", type: "TT-II" },
+        { label: "End Semester", type: "EndSemester" }, { label: "Re-End Semester", type: "ReEndSemester" }
       ];
-
-      const papersToShow = selectedBranch === 'First Year' ? fyPapers : otherPapers;
-
-      papersToShow.forEach(p => {
+      (selectedBranch === 'First Year' ? fyPapers : otherPapers).forEach(p => {
         const btn = document.createElement('button');
         btn.className = 'option';
         btn.textContent = p.label;
         btn.dataset.type = p.type;
-        btn.onclick = handlePaperClick;
-        paperTypeButtons.appendChild(btn);
+        btn.onclick = (e) => {
+          const type = e.target.dataset.type;
+          const code = selectedBranch === 'First Year' ? 'FY' : selectedStudy;
+          const filename = `${sanitize(selectedBranch)}-${sanitize(code)}-${sanitize(selectedYear)}-${sanitize(selectedSubject)}-${sanitize(type)}.pdf`;
+          window.open(`papers/${filename}`, '_blank');
+          document.getElementById('paperTypeSubtitle').innerHTML =
+            `Opening <b>${type}</b>…<br><span style="font-size:12px;opacity:0.6;">Check the new tab. If not found, contact admin.</span>`;
+        };
+        container.appendChild(btn);
       });
     }
 
-    function handlePaperClick(e) {
-      selectedPaperType = e.target.dataset.type;
-      const safe = s => s.replace(/[^a-zA-Z0-9]/g, '');
-      const code = selectedBranch === 'First Year' ? 'FY' : selectedStudy;
-      // Ensure the 'papers' folder exists relative to this HTML file
-      const file = `${safe(selectedBranch)}-${safe(code)}-${safe(selectedYear)}-${safe(selectedSubject)}-${safe(selectedPaperType)}.pdf`;
-
-      window.open(`papers/${file}`, '_blank');
-      document.getElementById('paperTypeSubtitle').innerHTML = `Opening <b>${selectedPaperType}</b>... <br><span style="font-size:12px;opacity:0.7;">Check new tab.</span>`;
+    function handleAdminBranchChange() {
+      const branch = document.getElementById('adminBranch').value;
+      const studyEl = document.getElementById('adminStudy');
+      if (branch === 'First Year') {
+        studyEl.innerHTML = `<option value="FY">First Year (FY)</option>`;
+        studyEl.disabled = true;
+      } else {
+        studyEl.innerHTML = `<option value="SY">SY</option><option value="TY">TY</option><option value="LY">LY</option>`;
+        studyEl.disabled = false;
+      }
+      adminUpdateSubjects();
     }
 
-    // Navigation buttons
-    document.getElementById('backBranch').onclick = () => showPage(document.getElementById('branchPage'));
-    document.getElementById('backStudy').onclick = () => selectedBranch === 'First Year' ? showPage(document.getElementById('branchPage')) : showPage(document.getElementById('studyPage'));
-    document.getElementById('backYear').onclick = () => showPage(document.getElementById('yearPage'));
-    document.getElementById('backToSubjects').onclick = () => showPage(document.getElementById('subjectPage'));
+    function adminUpdateSubjects() {
+      const branch = document.getElementById('adminBranch').value;
+      const study = document.getElementById('adminStudy').value;
+      const subjectEl = document.getElementById('adminSubject');
+      const typeEl = document.getElementById('adminType');
+      subjectEl.innerHTML = '';
+      typeEl.innerHTML = '';
+      const list = branch === "First Year" ? subjectsData["First Year"] : (subjectsData[branch]?.[study] || []);
+      list.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; subjectEl.appendChild(o); });
+      const types = branch === "First Year"
+        ? ["TT-I-A", "TT-II-A", "EndSem-A", "ReEndSem-A", "TT-I-B", "TT-II-B", "EndSem-B", "ReEndSem-B"]
+        : ["TT-I", "TT-II", "EndSemester", "ReEndSemester"];
+      types.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; typeEl.appendChild(o); });
+      adminGenerate();
+    }
 
-    // Default page
-    showPage(document.getElementById('loginPage'));
+    function adminGenerate() {
+      const b = sanitize(document.getElementById('adminBranch').value);
+      const s = sanitize(document.getElementById('adminStudy').value);
+      const y = sanitize(document.getElementById('adminYear').value);
+      const sub = sanitize(document.getElementById('adminSubject').value);
+      const t = sanitize(document.getElementById('adminType').value);
+      document.getElementById('adminDisplay').textContent = `${b}-${s}-${y}-${sub}-${t}`;
+    }
   </script>
+
+<footer class="footer">
+    © <span id="year"></span> Atharva Wagh and Team · All Rights Reserved
+</footer> 
+
 </body>
 </html>
-
-
