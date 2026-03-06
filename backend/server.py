@@ -29,6 +29,9 @@ ADMIN_PASS = "rcpit@2001"
 def index():
     return send_from_directory(app.static_folder, "index.html")
 
+@app.route("/<path:path>")
+def static_files(path):
+    return send_from_directory(app.static_folder, path)
 
 @app.route("/ping")
 def ping():
