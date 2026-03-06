@@ -12,7 +12,7 @@ app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), '..'
 CORS(app)
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-print("TOKEN:", GITHUB_TOKEN)
+print("GitHub token loaded:", bool(GITHUB_TOKEN))
 
 REPO = "atharvawagh96k/rcpit-papers"
 BRANCH = "main"
