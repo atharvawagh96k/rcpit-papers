@@ -951,33 +951,103 @@ document.addEventListener('DOMContentLoaded',()=>{
   eye(document.getElementById('uEye'),document.getElementById('upass'));
   eye(document.getElementById('aEye'),document.getElementById('apass'));
 
-  // Student login
-  document.getElementById('loginForm').onsubmit=e=>{
-    e.preventDefault();
-    const u=document.getElementById('uname').value.trim(),p=document.getElementById('upass').value;
-    if(u==='student'&&p==='1234'){
-      document.getElementById('browseUser').textContent=u.charAt(0).toUpperCase()+u.slice(1);
-      resetBrowse();showPage('browsePage');
+// Student login (backend authentication)
+document.getElementById('loginForm').onsubmit = async e => {
+
+  e.preventDefault();
+
+  const u = document.getElementById('uname').value.trim();
+  const p = document.getElementById('upass').value;
+
+  try{
+
+    const res = await fetch(window.location.origin + "/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: u,
+        password: p,
+        role: "student"
+      })
+    });
+
+    if(res.ok){
+
+      document.getElementById('browseUser').textContent =
+        u.charAt(0).toUpperCase()+u.slice(1);
+
+      resetBrowse();
+      showPage('browsePage');
+
     }else{
-      ['uname','upass'].forEach(id=>{const el=document.getElementById(id);el.classList.add('err');setTimeout(()=>el.classList.remove('err'),400);});
-      toast('Invalid credentials. Please try again.');
+
+      ['uname','upass'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.classList.add('err');
+        setTimeout(()=>el.classList.remove('err'),400);
+      });
+
+      toast("Invalid credentials.");
+
     }
-  };
+
+  }catch(err){
+    toast("Server error. Try again.");
+  }
+
+};
 
   document.getElementById('toAdminBtn').onclick=()=>showPage('adminLogin');
   document.getElementById('backBtn').onclick=()=>showPage('loginPage');
 
   // Admin login
-  document.getElementById('adminForm').onsubmit=e=>{
-    e.preventDefault();
-    const u=document.getElementById('aname').value.trim(),p=document.getElementById('apass').value;
-    if(u==='admin'&&p==='1234'){
-      resetAdmin();document.getElementById('quickWrap').style.display='';showPage('adminDash');
+// Admin login (backend authentication)
+document.getElementById('adminForm').onsubmit = async e => {
+
+  e.preventDefault();
+
+  const u = document.getElementById('aname').value.trim();
+  const p = document.getElementById('apass').value;
+
+  try{
+
+    const res = await fetch(window.location.origin + "/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: u,
+        password: p,
+        role: "admin"
+      })
+    });
+
+    if(res.ok){
+
+      resetAdmin();
+      document.getElementById('quickWrap').style.display='';
+      showPage('adminDash');
+
     }else{
-      ['aname','apass'].forEach(id=>{const el=document.getElementById(id);el.classList.add('err');setTimeout(()=>el.classList.remove('err'),400);});
-      toast('Invalid admin credentials.');
+
+      ['aname','apass'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.classList.add('err');
+        setTimeout(()=>el.classList.remove('err'),400);
+      });
+
+      toast("Invalid admin credentials.");
+
     }
-  };
+
+  }catch(err){
+    toast("Server error.");
+  }
+
+};
 
   // Logout
   document.getElementById('browseOut').onclick=()=>{resetBrowse();showPage('loginPage');};
@@ -1060,3 +1130,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
