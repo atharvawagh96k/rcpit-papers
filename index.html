@@ -777,43 +777,19 @@ function simUpload(entry,fn){
 }
 async function uploadFileToGitHub(file, filename){
 
-  const reader = new FileReader();
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("filename", filename);
 
-  return new Promise((resolve, reject)=>{
-
-    reader.onload = async function(){
-
-      const base64 = reader.result.split(',')[1];
-
-      try{
-        const res = await fetch(
-          "https://api.github.com/repos/atharvawagh96k/rcpit-papers/contents/papers/" + filename,
-          {
-            method: "PUT",
-            headers: {
-              "Authorization": "token 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",
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              message: "Upload question paper",
-              content: base64
-            })
-          }
-        );
-
-        if(!res.ok) throw new Error("Upload failed");
-
-        resolve();
-
-      }catch(err){
-        reject(err);
-      }
-
-    };
-
-    reader.readAsDataURL(file);
-
+  const res = await fetch(window.location.origin + "/upload", {
+    method: "POST",
+    body: formData
   });
+
+  if(!res.ok){
+    throw new Error("Upload failed");
+  }
+
 }
 async function uploadAll(){
   if(!entries.length)return;
