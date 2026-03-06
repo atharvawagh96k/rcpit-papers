@@ -21,7 +21,7 @@ def index():
 def ping():
     return jsonify({"status": "server is alive", "token_set": bool(GITHUB_TOKEN)})
 
-@app.route("/upload", methods=["POST"])
+@app.route("/upload", methods=["POST", "GET"])
 def upload():
     file = request.files.get("file")
     filename = request.form.get("filename")
