@@ -581,39 +581,6 @@ footer{
 <footer>© <span id="yr"></span> Atharva Wagh and Team · All Rights Reserved</footer>
 
 <script>
-async function uploadToGitHub(file) {
-
-  const reader = new FileReader();
-
-  reader.onload = async function() {
-
-    const base64 = reader.result.split(',')[1];
-
-    const filename = file.name;
-
-    const response = await fetch(
-      "https://api.github.com/repos/atharvawagh96k/rcpit-papers/contents/papers/" + filename,
-      {
-        method: "PUT",
-        headers: {
-          "Authorization": "token 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",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: "Upload question paper",
-          content: base64
-        })
-      }
-    );
-
-    const data = await response.json();
-    console.log(data);
-
-    alert("Upload successful!");
-  };
-
-  reader.readAsDataURL(file);
-}
 /* ── DATA ── */
 const BRANCH_NORM={
   'First Year':'FirstYear','CS&E':'CSE','CSE[DS]':'CSEDS','AIML':'AIML',
@@ -627,12 +594,12 @@ const TYPE_NORM={
 const normStr=s=>(s||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
 const normYr=y=>(y||'').replace(/-/g,'');
 function buildFn(b,s,y,sub,t){
-  return `${BRANCH_NORM[b]||normStr(b)}-${(s||'').toUpperCase()}-${normYr(y)}-${normStr(sub)}-${TYPE_NORM[t]||normStr(t)}.pdf`;
+  return `${BRANCH_NORM[b]}-${s}-${normYr(y)}-${san(sub)}-${t}.pdf`;
 }
 
 const BRANCHES=["First Year","CS&E","CSE[DS]","AIML","AIDS","IT","Electrical","Civil","Mechanical","E&TC"];
 const ACAD_YEARS=["2025-26","2024-25","2023-24"];
-const FY_TYPES=["TT-I-A","TT-II-A","EndSem-A","ReEndSem-A","TT-I-B","TT-II-B","EndSem-B","ReEndSem-B"];
+const FY_TYPES=["TTIA","TTIIA","EndSemA","ReEndSemA","TTIB","TTIIB","EndSemB","ReEndSemB"];
 const OT_TYPES=["TT-I","TT-II","EndSemester","ReEndSemester"];
 const SUBJECTS={
   "First Year":["Mathematics I","Mathematics II","Java","C","Chemistry","Physics","B.E.E.& D.E.","EG","CEM","E.C.S."],
@@ -1057,23 +1024,51 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
 
   // Quick upload
-  document.getElementById('quickInput').addEventListener('change',async e=>{
-    const files=Array.from(e.target.files).filter(f=>f.type==='application/pdf');
-    if(!files.length){toast('Please select PDF files.');e.target.value='';return;}
-    const prog=document.getElementById('quProg'),msg=document.getElementById('quMsg'),bar=document.getElementById('quBar');
-    prog.classList.add('on');let done=0;
-    for(const f of files){
-      if(f.size>20*1024*1024){toast(`"${f.name}" exceeds 20 MB — skipped.`);done++;continue;}
-      msg.textContent=`Uploading ${done+1}/${files.length}: ${f.name}`;bar.style.width='0%';
-      await new Promise(r=>{let p=0;const iv=setInterval(()=>{p+=Math.random()*28+8;if(p>=100){p=100;bar.style.width='100%';clearInterval(iv);setTimeout(r,180);}else bar.style.width=p+'%';},110);});
-      done++;
-    }
-    msg.textContent=`✅ ${done} file${done>1?'s':''} uploaded`;
-    toast(`${done} file${done>1?'s':''} uploaded!`,'ok');
-    e.target.value='';setTimeout(()=>{prog.classList.remove('on');bar.style.width='0%';},3200);
-  });
+  document.getElementById('quickInput').addEventListener('change', async e=>{
+  const files = Array.from(e.target.files).filter(f=>f.type==='application/pdf');
 
-  showPage('loginPage');
+  if(!files.length){
+    toast('Please select PDF files.');
+    e.target.value='';
+    return;
+  }
+
+  const prog=document.getElementById('quProg');
+  const msg=document.getElementById('quMsg');
+  const bar=document.getElementById('quBar');
+
+  prog.classList.add('on');
+  let done=0;
+
+  for(const f of files){
+
+    if(f.size>20*1024*1024){
+      toast(`"${f.name}" exceeds 20 MB — skipped.`);
+      done++;
+      continue;
+    }
+
+    msg.textContent=`Uploading ${done+1}/${files.length}: ${f.name}`;
+    bar.style.width='30%';
+
+    try{
+      await uploadFileToGitHub(f, f.name);   // ← real upload
+      bar.style.width='100%';
+    }catch(err){
+      toast(`Failed to upload ${f.name}`);
+    }
+
+    done++;
+  }
+
+  msg.textContent=`✅ ${done} file${done>1?'s':''} uploaded`;
+  toast(`${done} file${done>1?'s':''} uploaded!`,'ok');
+
+  e.target.value='';
+  setTimeout(()=>{
+    prog.classList.remove('on');
+    bar.style.width='0%';
+  },3200);
 });
 </script>
 </body>
