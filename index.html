@@ -1,1130 +1,1008 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Question Paper Selector</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RCPIT — Question Paper Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f7eae0;
-  --blue: #0a57b5;
-  --blue-hover: #0c62c9;
-  --blue-light: rgba(10, 87, 181, 0.08);
-  --text: #0b2740;
-  --text-muted: #5a7a9a;
-  --input-bg: #fff;
-  --input-border: #dde4ee;
-  --error-red: #d9534f;
-  --card-bg: #fff;
-  --shadow: 0 12px 40px rgba(11, 39, 64, 0.10);
-  --shadow-hover: 0 20px 50px rgba(11, 39, 64, 0.16);
-  --radius: 20px;
-  --radius-sm: 12px;
+  --ink:#0f1923;--ink2:#26384d;--ink3:#4a6275;
+  --paper:#f5f2ed;--paper2:#ede9e2;--paper3:#e3ddd4;
+  --gold:#b8872a;--gold2:#d4a03a;--gold-bg:rgba(184,135,42,0.08);--gold-border:rgba(184,135,42,0.22);
+  --green:#1a6640;--green-bg:rgba(26,102,64,0.08);
+  --red:#b83232;--red-bg:rgba(184,50,50,0.07);
+  --card:#fffefb;--border:rgba(15,25,35,0.1);
+  --sh:0 2px 8px rgba(15,25,35,0.07),0 12px 40px rgba(15,25,35,0.09);
+  --sh2:0 4px 24px rgba(15,25,35,0.12),0 24px 64px rgba(15,25,35,0.14);
+  --r:16px;--r2:10px;--t:0.2s ease;
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-weight: 400;
-  transition: background 0.3s, color 0.3s;
-  padding-bottom: 60px;
-  background-image: radial-gradient(ellipse at 20% 50%, rgba(10,87,181,0.04) 0%, transparent 60%),
-                    radial-gradient(ellipse at 80% 20%, rgba(247,163,96,0.08) 0%, transparent 50%);
-  min-height: 100vh;
-}
-
-.wrapper {
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: 32px 16px;
-}
-
-.card {
-  width: min(420px, 94vw);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: stretch;
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 32px 28px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255,255,255,0.8);
-  transition: background 0.3s, box-shadow 0.3s;
-  animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1);
-}
-
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: clamp(22px, 3vw, 30px);
-  text-align: center;
-  line-height: 1.2;
-  color: var(--text);
-  letter-spacing: -0.3px;
-}
-
-p.subtitle {
-  text-align: center;
-  opacity: .65;
-  font-size: 13.5px;
-  font-weight: 400;
-  letter-spacing: 0.1px;
-  margin-top: -4px;
-}
-
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--input-border), transparent);
-  margin: 2px 0;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  position: relative;
-}
-
-.input-group label {
-  font-weight: 500;
-  font-size: 12.5px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.7px;
-}
-
-.input-group input,
-.input-group select {
-  padding: 13px 16px;
-  border-radius: var(--radius-sm);
-  border: 1.5px solid var(--input-border);
-  background-color: var(--input-bg);
-  font-size: 15px;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text);
-  transition: border-color .2s ease, box-shadow .2s ease;
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.input-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a7a9a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(10, 87, 181, .12);
-}
-
-#togglePassword, #adminTogglePassword {
-  position: absolute;
-  right: 12px;
-  top: 34px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 4px;
-  opacity: 0.55;
-  transition: opacity 0.15s;
-}
-#togglePassword:hover, #adminTogglePassword:hover { opacity: 1; }
-
-/* Primary Button */
-.option {
-  display: block;
-  background: var(--blue);
-  color: #fff;
-  padding: 15px 18px;
-  border-radius: var(--radius-sm);
-  text-align: center;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.1px;
-  box-shadow: 0 4px 14px rgba(10, 87, 181, .2);
-  transition: transform .1s ease, box-shadow .2s ease, background .15s ease;
-  user-select: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  width: 100%;
-}
-
-.option:hover {
-  background: var(--blue-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(10, 87, 181, .25);
-}
-
-.option:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(10, 87, 181, .15);
-}
-
-.option:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Secondary / ghost button */
-.option.secondary {
-  background: transparent;
-  color: var(--text-muted);
-  border: 1.5px solid var(--input-border);
-  box-shadow: none;
-  font-weight: 500;
-}
-.option.secondary:hover {
-  background: var(--blue-light);
-  color: var(--blue);
-  border-color: var(--blue);
-  box-shadow: none;
-}
-
-.muted {
-  opacity: .65;
-  font-size: 13px;
-  text-align: center;
-}
-
-.error-message {
-  padding: 10px 14px;
-  background-color: #fff2f2;
-  color: var(--error-red);
-  border: 1px solid #f5c6c6;
-  border-radius: 9px;
-  text-align: center;
-  font-size: 13.5px;
-  font-weight: 500;
-}
-
-.success-message {
-  padding: 10px 14px;
-  background-color: #edf9f0;
-  color: #1a7a3a;
-  border: 1px solid #b8e8c8;
-  border-radius: 9px;
-  text-align: center;
-  font-size: 13.5px;
-  font-weight: 500;
-}
-
-#subjectList, #paperTypeButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 0;
-}
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-
-.logo {
-  width: 100px;
-  height: auto;
-  border-radius: 8px;
-}
-
-/* Dark mode */
 body.dark {
-  --bg: #121a24;
-  --text: #e8edf5;
-  --text-muted: #7a99bb;
-  --input-bg: #1e2a38;
-  --input-border: #2c3e52;
-  --blue: #4a8fe8;
-  --blue-hover: #5aa1f9;
-  --blue-light: rgba(74,143,232,0.1);
-  --card-bg: #1a2536;
-  --shadow: 0 12px 40px rgba(0,0,0,0.35);
-  background-image: radial-gradient(ellipse at 20% 50%, rgba(74,143,232,0.06) 0%, transparent 60%);
+  --ink:#dde8f0;--ink2:#9ab5ca;--ink3:#5a7a90;
+  --paper:#0c1520;--paper2:#101d2a;--paper3:#162535;
+  --gold:#d4a03a;--gold2:#e8b84a;--gold-bg:rgba(212,160,58,0.1);--gold-border:rgba(212,160,58,0.2);
+  --green:#2a9a52;--green-bg:rgba(42,154,82,0.1);
+  --red:#e05050;--red-bg:rgba(224,80,80,0.08);
+  --card:#111e2b;--border:rgba(255,255,255,0.07);
+  --sh:0 2px 8px rgba(0,0,0,0.2),0 12px 40px rgba(0,0,0,0.3);
+  --sh2:0 4px 24px rgba(0,0,0,0.3),0 24px 64px rgba(0,0,0,0.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:'DM Sans',system-ui,sans-serif;
+  min-height:100vh;line-height:1.5;
+  transition:background var(--t),color var(--t);
+  padding-bottom:48px;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 10% 20%,rgba(184,135,42,0.05) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 60% at 90% 80%,rgba(15,25,35,0.04) 0%,transparent 70%);
 }
 
-body.dark .card {
-  border-color: rgba(255,255,255,0.05);
+/* ── LAYOUT ── */
+.page{min-height:100dvh;display:grid;place-items:center;padding:24px 16px}
+.page.split{display:flex;flex-direction:row;align-items:flex-start;justify-content:center;padding:24px;gap:20px}
+
+/* ── CARD ── */
+.card{
+  width:min(440px,96vw);background:var(--card);
+  border-radius:var(--r);padding:36px 32px;
+  box-shadow:var(--sh);border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:16px;
+  animation:rise .45s cubic-bezier(.22,1,.36,1) both;
+  position:relative;overflow:hidden;
+}
+.card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),rgba(184,135,42,.15),transparent);
+}
+#adminDashboard{width:min(520px,96vw)}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ── TOP BAR ── */
+.topbar{position:fixed;top:16px;right:16px;z-index:1000;display:flex;align-items:center;gap:8px}
+.tb-btn{
+  background:var(--card);color:var(--ink3);
+  border:1px solid var(--border);padding:7px 13px;border-radius:var(--r2);
+  cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;
+  box-shadow:var(--sh);transition:all var(--t);display:flex;align-items:center;gap:5px;
+}
+.tb-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.upload-wrap{position:relative;overflow:hidden}
+.upload-wrap input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.tb-upload{
+  background:linear-gradient(135deg,var(--green),#2a9a52);color:#fff;border:none;
+  padding:7px 14px;border-radius:var(--r2);font-size:13px;font-weight:600;
+  font-family:'DM Sans',sans-serif;box-shadow:var(--sh);
+  display:flex;align-items:center;gap:6px;pointer-events:none;transition:all var(--t);
+}
+.upload-wrap:hover .tb-upload{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,102,64,.3)}
+
+/* ── LOGO & HEADING ── */
+.brand{display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:2px}
+.brand-logo{
+  width:72px;height:72px;object-fit:contain;border-radius:12px;
+  border:1px solid var(--border);background:white;padding:6px;box-shadow:var(--sh);
+}
+.brand-name{
+  font-family:'DM Serif Display',serif;font-size:10.5px;
+  letter-spacing:2.5px;text-transform:uppercase;color:var(--ink3);
+}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var(--ink);line-height:1.2}
+.sub{font-size:13px;color:var(--ink3);text-align:center;line-height:1.55}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:2px 0}
+
+/* ── FORM ── */
+.field{display:flex;flex-direction:column;gap:6px;position:relative}
+.field label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.9px}
+.field input,.field select,.field textarea{
+  padding:11px 14px;border-radius:var(--r2);border:1.5px solid var(--border);
+  background:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);
+  transition:border-color var(--t),box-shadow var(--t);width:100%;appearance:none;
+}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%234a6275' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-bg)}
+.field input.err{border-color:var(--red);animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
+.pw-eye{
+  position:absolute;right:12px;top:34px;height:38px;
+  display:flex;align-items:center;background:none;border:none;
+  cursor:pointer;font-size:14px;opacity:.4;transition:opacity .15s;
+}
+.pw-eye:hover{opacity:.9}
+
+/* ── BUTTONS ── */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 18px;border-radius:var(--r2);font-family:'DM Sans',sans-serif;
+  font-weight:600;font-size:14px;border:none;cursor:pointer;
+  transition:transform var(--t),box-shadow var(--t),background var(--t);width:100%;
+}
+.btn-primary{background:var(--ink);color:#fff;box-shadow:0 3px 12px rgba(15,25,35,.25)}
+.btn-primary:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(15,25,35,.3)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;color:var(--ink3);border:1.5px solid var(--border)}
+.btn-ghost:hover{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-border)}
+.btn-green{background:linear-gradient(135deg,var(--green),#2a9a52);color:#fff;box-shadow:0 3px 12px rgba(26,102,64,.25)}
+.btn-green:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,102,64,.35)}
+.btn-green:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-danger{background:transparent;color:var(--ink3);border:1.5px solid var(--border)}
+.btn-danger:hover{background:var(--red-bg);color:var(--red);border-color:rgba(184,50,50,.25)}
+
+/* ── BROWSE PAGE ── */
+#browsePage{width:min(460px,96vw)}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.user-pill{display:flex;align-items:center;gap:10px}
+.avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;flex-shrink:0;
+}
+.user-info .name{font-size:14px;font-weight:600;color:var(--ink);line-height:1.2}
+.user-info .role{font-size:11px;color:var(--ink3)}
+.logout-btn{
+  background:transparent;border:1.5px solid var(--border);color:var(--ink3);
+  font-size:12px;font-weight:600;padding:5px 11px;border-radius:8px;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all var(--t);
+}
+.logout-btn:hover{border-color:rgba(184,50,50,.3);color:var(--red);background:var(--red-bg)}
+
+/* ── STEPPER ── */
+.stepper{display:flex;align-items:center;margin-bottom:2px}
+.s-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .28s ease;flex-shrink:0}
+.s-dot.done{background:var(--green)}
+.s-dot.active{background:var(--gold);transform:scale(1.4)}
+.s-line{flex:1;height:1.5px;background:var(--border);transition:background .28s ease}
+.s-line.done{background:var(--green)}
+
+/* ── STEP ROW ── */
+.step{display:flex;flex-direction:column;gap:6px;animation:appear .28s cubic-bezier(.22,1,.36,1) both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.step-lbl{
+  font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;
+  color:var(--ink3);display:flex;align-items:center;gap:7px;
+}
+.step-num{
+  width:17px;height:17px;border-radius:50%;background:var(--gold);
+  color:#fff;font-size:8.5px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step select{
+  padding:11px 36px 11px 14px;border-radius:var(--r2);border:1.5px solid var(--border);
+  background:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);
+  width:100%;appearance:none;cursor:pointer;transition:border-color var(--t),box-shadow var(--t);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%234a6275' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.step select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-bg)}
+.step select.chosen{border-color:var(--gold);background-color:var(--gold-bg)}
+.step.off{display:none}
+
+/* ── PAPER TYPES ── */
+.pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pt-btn{
+  display:flex;align-items:center;gap:9px;padding:11px 13px;
+  border-radius:var(--r2);background:var(--paper);
+  border:1.5px solid var(--border);color:var(--ink);
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;
+  cursor:pointer;transition:all var(--t);text-align:left;
+  animation:appear .25s cubic-bezier(.22,1,.36,1) both;
+}
+.pt-btn:hover{border-color:var(--gold);background:var(--gold-bg);color:var(--gold);transform:translateY(-1px);box-shadow:0 3px 12px rgba(184,135,42,.15)}
+.pt-btn .icon{font-size:17px;flex-shrink:0}
+.pt-btn .lbl{font-weight:700;font-size:13px;line-height:1.2}
+.pt-btn .code{font-size:10px;color:var(--ink3);margin-top:1px;font-weight:400}
+.pt-btn:hover .code{color:var(--gold)}
+.open-msg{
+  padding:10px 14px;background:var(--gold-bg);border:1px solid var(--gold-border);
+  border-radius:var(--r2);font-size:12px;color:var(--ink3);text-align:center;
+  line-height:1.5;display:none;
+}
+.open-msg.on{display:block}
+
+/* ── ADMIN DASHBOARD ── */
+.dash-head{display:flex;align-items:center;gap:10px}
+.badge{
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;
+  letter-spacing:.8px;text-transform:uppercase;
+  background:var(--green-bg);color:var(--green);border:1px solid rgba(26,102,64,.2);
+}
+.sec-lbl{
+  font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  color:var(--ink3);display:flex;align-items:center;gap:8px;
+}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+.drop-zone{
+  border:2px dashed var(--border);border-radius:var(--r2);padding:28px 16px;
+  text-align:center;cursor:pointer;transition:all var(--t);position:relative;overflow:hidden;
+}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--gold);background:var(--gold-bg)}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:30px;display:block;margin-bottom:8px}
+.drop-txt{font-size:14px;font-weight:600;color:var(--gold);display:block;margin-bottom:3px}
+.drop-hint{font-size:11.5px;color:var(--ink3)}
+#fileList{display:flex;flex-direction:column;gap:10px}
+
+/* ── FILE ENTRY ── */
+.fe{
+  background:var(--paper);border:1.5px solid var(--gold-border);
+  border-radius:var(--r2);overflow:hidden;
+  box-shadow:0 0 0 3px var(--gold-bg);
+  animation:appear .28s cubic-bezier(.22,1,.36,1) both;
+}
+.fe.done{border-color:rgba(26,102,64,.3);box-shadow:0 0 0 3px var(--green-bg)}
+.fe-top{
+  display:flex;align-items:center;gap:9px;padding:10px 12px;
+  background:rgba(15,25,35,.025);border-bottom:1px solid var(--border);
+}
+body.dark .fe-top{background:rgba(255,255,255,.025)}
+.fe-ico{font-size:16px;flex-shrink:0}
+.fe-info{flex:1;min-width:0}
+.fe-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fe-size{font-size:10.5px;color:var(--ink3);margin-top:1px}
+.fe-prev{background:transparent;border:1.5px solid var(--border);color:var(--ink3);padding:4px 10px;border-radius:7px;font-size:11.5px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all var(--t);flex-shrink:0}
+.fe-prev:hover{border-color:var(--gold-border);color:var(--gold)}
+.fe-del{background:none;border:none;cursor:pointer;font-size:14px;opacity:.3;padding:4px 5px;border-radius:5px;transition:all var(--t);flex-shrink:0}
+.fe-del:hover{opacity:1;background:var(--red-bg);color:var(--red)}
+.fe-body{padding:11px;display:flex;flex-direction:column;gap:9px}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.mf{display:flex;flex-direction:column;gap:3px}
+.mf-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--gold);opacity:.9}
+.mf select{
+  padding:7px 9px;border-radius:7px;border:1.5px solid var(--gold-border);
+  background:var(--gold-bg);font-size:12.5px;font-family:'DM Sans',sans-serif;color:var(--ink);
+  width:100%;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 10 10'%3E%3Cpath fill='%23b8872a' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 7px center;padding-right:20px;cursor:pointer;
+  transition:border-color var(--t);
+}
+.mf select:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px var(--gold-bg)}
+.mf select:disabled{opacity:.55;cursor:not-allowed}
+.mf.full{grid-column:1/-1}
+.fe-fname{
+  display:flex;align-items:center;gap:7px;
+  background:linear-gradient(90deg,var(--gold-bg),transparent);
+  border:1.5px dashed var(--gold-border);border-radius:8px;padding:8px 11px;
+}
+.fe-fname-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);white-space:nowrap}
+.fe-fname-val{font-family:'Courier New',monospace;font-size:11px;font-weight:600;color:var(--gold);word-break:break-all;flex:1}
+.fe-prog{display:none;flex-direction:column;gap:4px}
+.fe-prog.on{display:flex}
+.prog-bg{background:var(--border);border-radius:100px;height:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#2a9a52);border-radius:100px;width:0%;transition:width .28s ease}
+.prog-lbl{font-size:10.5px;color:var(--ink3)}
+.fe-stat{font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;display:none}
+.fe-stat.ok{display:block;background:var(--green-bg);color:var(--green);border:1px solid rgba(26,102,64,.2)}
+.fe-stat.fail{display:block;background:var(--red-bg);color:var(--red);border:1px solid rgba(184,50,50,.2)}
+
+/* ── ADD MORE / COUNTS ── */
+.count-badge{
+  background:var(--ink);color:#fff;font-size:11px;font-weight:700;
+  padding:3px 11px;border-radius:20px;display:inline-flex;align-items:center;
+}
+body.dark .count-badge{background:var(--gold)}
+.add-more{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  border:1.5px dashed var(--border);background:transparent;
+  color:var(--ink3);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;
+  padding:9px;border-radius:var(--r2);cursor:pointer;
+  transition:all var(--t);position:relative;overflow:hidden;
+}
+.add-more input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.add-more:hover{border-color:var(--gold-border);color:var(--gold);background:var(--gold-bg)}
+
+/* ── UPLOAD PROGRESS BAR (global) ── */
+.all-prog{display:none;flex-direction:column;gap:5px}
+.all-prog.on{display:flex}
+.all-prog-bg{background:var(--border);border-radius:100px;height:5px;overflow:hidden}
+.all-prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#2a9a52);border-radius:100px;width:0%;transition:width .35s ease}
+.all-prog-lbl{font-size:11.5px;color:var(--ink3)}
+.all-ok{
+  padding:9px 13px;background:var(--green-bg);color:var(--green);
+  border:1px solid rgba(26,102,64,.2);border-radius:var(--r2);
+  text-align:center;font-size:13px;font-weight:600;display:none;
 }
 
-/* Dark toggle */
-.dark-toggle {
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  background: var(--card-bg);
-  color: var(--text);
-  border: 1.5px solid var(--input-border);
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 15px;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: all 0.2s;
+/* ── TOAST ── */
+.toasts{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:300px}
+.toast{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border-radius:var(--r2);background:var(--card);
+  border:1px solid var(--border);box-shadow:var(--sh2);
+  font-size:13px;font-weight:500;
+  animation:toastIn .3s cubic-bezier(.22,1,.36,1) both;
 }
-.dark-toggle:hover { transform: scale(1.05); }
+.toast.out{animation:toastOut .22s ease forwards}
+.toast-err{border-left:3px solid var(--red)}
+.toast-ok{border-left:3px solid var(--green)}
+@keyframes toastIn{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(32px)}}
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  padding: 12px;
-  font-size: 12.5px;
-  font-weight: 400;
-  background: var(--bg);
-  color: var(--text-muted);
-  border-top: 1px solid var(--input-border);
-  z-index: 100;
-  letter-spacing: 0.2px;
+/* ── QUICK UPLOAD PROGRESS ── */
+.qu-prog{
+  position:fixed;bottom:64px;right:18px;z-index:9998;
+  background:var(--card);border:1px solid var(--border);
+  border-left:3px solid var(--green);padding:11px 14px;border-radius:var(--r2);
+  font-size:12.5px;font-weight:500;box-shadow:var(--sh2);
+  display:none;flex-direction:column;gap:5px;max-width:280px;min-width:200px;
 }
+.qu-prog.on{display:flex;animation:toastIn .28s cubic-bezier(.22,1,.36,1) both}
+.qu-bg{background:var(--border);border-radius:100px;height:3px;overflow:hidden}
+.qu-fill{height:100%;background:linear-gradient(90deg,var(--green),#2a9a52);border-radius:100px;width:0%;transition:width .22s ease}
 
-/* ─── ADMIN DASHBOARD ─── */
-#adminDashboard {
-  max-width: 480px;
-  gap: 16px;
+/* ── PDF PREVIEW PANEL ── */
+#pdfPanel{
+  display:none;flex-direction:column;width:380px;min-width:380px;flex-shrink:0;
+  background:var(--card);border-radius:var(--r);box-shadow:var(--sh2);
+  border:1px solid var(--border);overflow:hidden;align-self:flex-start;
+  height:calc(100vh - 48px);position:sticky;top:24px;
+  animation:rise .35s cubic-bezier(.22,1,.36,1);
 }
-
-#adminDashboard h1 {
-  font-size: 24px;
-  text-align: left;
+#pdfPanel.on{display:flex}
+.panel-head{
+  display:flex;align-items:center;gap:9px;padding:13px 15px;
+  border-bottom:1px solid var(--border);flex-shrink:0;
 }
-
-#adminDashboard .subtitle {
-  text-align: left;
-  margin-top: 0;
+.panel-ico{font-size:18px;flex-shrink:0}
+.panel-info{flex:1;min-width:0}
+.panel-name{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.panel-meta{font-size:10.5px;color:var(--ink3);margin-top:1px}
+.panel-close{
+  background:var(--red-bg);border:1.5px solid rgba(184,50,50,.2);color:var(--red);
+  cursor:pointer;font-size:12px;font-weight:700;padding:4px 11px;
+  border-radius:7px;transition:all var(--t);font-family:'DM Sans',sans-serif;
 }
-
-.admin-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 4px;
+.panel-close:hover{background:rgba(184,50,50,.15)}
+.panel-body{flex:1;overflow:hidden;position:relative;background:#e5e5e5}
+body.dark .panel-body{background:#0a0f15}
+#panelFrame{width:100%;height:100%;border:none;display:block}
+.panel-load{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;pointer-events:none;
 }
-
-.admin-badge {
-  background: linear-gradient(135deg, #0a57b5, #1a7ad4);
-  color: white;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
+.spin-lg{
+  width:28px;height:28px;border:3px solid var(--border);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite;
 }
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.info-box {
-  background: linear-gradient(135deg, rgba(10,87,181,0.06), rgba(10,87,181,0.02));
-  border: 1px solid rgba(10,87,181,0.2);
-  color: var(--blue);
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.6;
+/* ── FOOTER ── */
+footer{
+  position:fixed;bottom:0;left:0;width:100%;text-align:center;
+  padding:11px;font-size:11.5px;background:var(--paper);
+  color:var(--ink3);border-top:1px solid var(--border);z-index:100;
+  transition:background var(--t);letter-spacing:.2px;
 }
 
-.info-box code {
-  font-family: 'DM Mono', 'Courier New', monospace;
-  font-size: 12px;
-  background: rgba(10,87,181,0.12);
-  padding: 1px 5px;
-  border-radius: 4px;
-}
-
-/* Generated filename display */
-.filename-display {
-  background: linear-gradient(135deg, var(--blue-light), rgba(10,87,181,0.03));
-  border: 1.5px dashed rgba(10,87,181,0.3);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.filename-icon {
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.filename-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.7px;
-  color: var(--text-muted);
-  margin-bottom: 3px;
-}
-
-.filename-value {
-  font-family: 'DM Mono', 'Courier New', monospace;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--blue);
-  word-break: break-all;
-  line-height: 1.4;
-}
-
-/* File select zone */
-.file-select-zone {
-  border: 2px dashed var(--input-border);
-  border-radius: var(--radius-sm);
-  padding: 24px 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  background: transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-.file-select-zone:hover,
-.file-select-zone.dragover {
-  border-color: var(--blue);
-  background: var(--blue-light);
-}
-
-.file-select-zone input[type="file"] {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-}
-
-.file-select-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.file-select-text {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--blue);
-  display: block;
-  margin-bottom: 4px;
-}
-
-.file-select-hint {
-  font-size: 12px;
-  color: var(--text-muted);
-  display: block;
-}
-
-/* Selected file preview */
-.file-preview {
-  display: none;
-  background: #edf9f0;
-  border: 1px solid #b8e8c8;
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  align-items: center;
-  gap: 12px;
-}
-
-body.dark .file-preview {
-  background: rgba(26,122,58,0.1);
-  border-color: rgba(26,122,58,0.3);
-}
-
-.file-preview.visible { display: flex; }
-
-.file-preview-icon { font-size: 22px; flex-shrink: 0; }
-
-.file-preview-info { flex: 1; min-width: 0; }
-
-.file-preview-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a7a3a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.file-preview-size {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-.file-preview-remove {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  opacity: 0.5;
-  padding: 4px;
-  border-radius: 6px;
-  transition: opacity 0.15s;
-  flex-shrink: 0;
-}
-.file-preview-remove:hover { opacity: 1; }
-
-/* Upload progress */
-.upload-progress {
-  display: none;
-  flex-direction: column;
-  gap: 8px;
-}
-.upload-progress.visible { display: flex; }
-
-.progress-bar-bg {
-  background: var(--input-border);
-  border-radius: 100px;
-  height: 6px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--blue), #4a9ef8);
-  border-radius: 100px;
-  width: 0%;
-  transition: width 0.3s ease;
-}
-
-.progress-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  text-align: center;
-}
-
-/* Upload button - special green */
-.upload-btn {
-  background: linear-gradient(135deg, #1a7a3a, #228b45);
-  box-shadow: 0 4px 14px rgba(26,122,58,0.25);
-}
-.upload-btn:hover {
-  background: linear-gradient(135deg, #228b45, #2da355);
-  box-shadow: 0 8px 22px rgba(26,122,58,0.3);
-}
-
-#adminLogoutBtn {
-  background: transparent;
-  color: var(--text-muted);
-  border: 1.5px solid var(--input-border);
-  box-shadow: none;
-  font-weight: 500;
-}
-#adminLogoutBtn:hover {
-  background: rgba(217,83,79,0.08);
-  color: var(--error-red);
-  border-color: rgba(217,83,79,0.3);
-}
-
-/* Section label */
-.section-label {
-  font-size: 11.5px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--input-border);
-}
-
-/* Two column grid for dropdowns */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
+/* ── MISC ── */
+.muted{color:var(--ink3);font-size:12px;text-align:center}
+@media(max-width:860px){.page.split{flex-direction:column;align-items:center}#pdfPanel{width:min(480px,96vw);height:72vh;position:static}}
+@media(max-width:480px){.card{padding:24px 18px}.meta-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-  <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">🌓</button>
-  
-  <main class="wrapper">
 
-    <!-- Student Login -->
-    <section class="card" id="loginPage">
-      <div class="logo-container">
-        <img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="RCPIT Logo" class="logo">
-      </div>
-      <h1>Student Login</h1>
-      <p class="subtitle">Previous Year Question Paper Archive Portal</p>
-      <div class="divider"></div>
-      
-      <form id="loginForm" style="display:flex;flex-direction:column;gap:14px;">
-        <div class="input-group">
-          <label for="username">PRN / User ID</label>
-          <input type="text" id="username" placeholder="Enter your PRN" required>
-        </div>
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Enter your password" required>
-          <button type="button" id="togglePassword">🔓</button>
-        </div>
-        <p id="loginError" class="error-message" style="display:none;">Invalid credentials. Please try again.</p>
-        <button type="submit" class="option" style="margin-top:4px;">Sign In</button>
-        <button type="button" id="adminBtn" class="option secondary">Admin Portal →</button>
-      </form>
-    </section>
+<div class="topbar">
+  <div class="upload-wrap" id="quickWrap" style="display:none">
+    <input type="file" id="quickInput" accept=".pdf" multiple>
+    <button class="tb-upload">⬆ Direct Upload</button>
+  </div>
+  <button class="tb-btn" onclick="document.body.classList.toggle('dark')">🌓 Theme</button>
+</div>
 
-    <!-- Admin Login -->
-    <section class="card" id="adminLoginPage" style="display:none">
-      <div class="logo-container">
-        <img src="https://www.rcpit.ac.in/uploads/1599837268.png" alt="RCPIT Logo" class="logo">
+<div class="qu-prog" id="quProg"><span id="quMsg">Uploading…</span><div class="qu-bg"><div class="qu-fill" id="quBar"></div></div></div>
+<div class="toasts" id="toasts"></div>
+
+<main class="page" id="mainWrap">
+
+  <!-- STUDENT LOGIN -->
+  <section class="card" id="loginPage">
+    <div class="brand">
+      <img src="https://www.rcpit.ac.in/uploads/1599837268.png" class="brand-logo" alt="RCPIT">
+      <span class="brand-name">R.C. Patel Institute of Technology</span>
+    </div>
+    <div style="text-align:center;margin-top:2px">
+      <h1>Welcome Back</h1>
+      <p class="sub" style="margin-top:5px">Question Paper Archive · Student Portal</p>
+    </div>
+    <div class="rule"></div>
+    <form id="loginForm" style="display:flex;flex-direction:column;gap:11px">
+      <div class="field">
+        <label for="uname">PRN / User ID</label>
+        <input type="text" id="uname" placeholder="Enter your PRN" autocomplete="username" required>
       </div>
+      <div class="field">
+        <label for="upass">Password</label>
+        <input type="password" id="upass" placeholder="Enter your password" autocomplete="current-password" required>
+        <button type="button" class="pw-eye" id="uEye">👁</button>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top:2px">Sign In →</button>
+      <button type="button" id="toAdminBtn" class="btn btn-ghost">🔐 Admin Portal</button>
+    </form>
+    <p class="muted">Use your college credentials to sign in</p>
+  </section>
+
+  <!-- ADMIN LOGIN -->
+  <section class="card" id="adminLogin" style="display:none">
+    <div class="brand">
+      <img src="https://www.rcpit.ac.in/uploads/1599837268.png" class="brand-logo" alt="RCPIT">
+      <span class="brand-name">R.C. Patel Institute of Technology</span>
+    </div>
+    <div style="text-align:center;margin-top:2px">
       <h1>Admin Login</h1>
-      <p class="subtitle">Question Paper Management Portal</p>
-      <div class="divider"></div>
-
-      <form id="adminLoginForm" style="display:flex;flex-direction:column;gap:14px;">
-        <div class="input-group">
-          <label for="adminUsername">Admin ID</label>
-          <input type="text" id="adminUsername" placeholder="Enter admin username" required>
-        </div>
-        <div class="input-group">
-          <label for="adminPassword">Password</label>
-          <input type="password" id="adminPassword" placeholder="Enter password" required>
-          <button type="button" id="adminTogglePassword">🔓</button>
-        </div>
-        <p id="adminLoginError" class="error-message" style="display:none;">Invalid admin credentials.</p>
-        <button type="submit" class="option" style="margin-top:4px;">Sign In</button>
-        <button type="button" class="option secondary" id="backToStudentLogin">← Student Login</button>
-      </form>
-    </section>
-
-    <!-- Branch Selection -->
-    <section class="card" id="branchPage" style="display:none">
-      <h1>Select Branch</h1>
-      <p class="subtitle">Choose your department to continue</p>
-      <div class="divider"></div>
-      <button class="option" data-branch="First Year">First Year</button>
-      <button class="option" data-branch="CS&E">CS&E</button>
-      <button class="option" data-branch="CSE[DS]">CSE[DS]</button>
-      <button class="option" data-branch="AIML">AIML</button>
-      <button class="option" data-branch="AIDS">AIDS</button>
-      <button class="option" data-branch="IT">IT</button>
-      <button class="option" data-branch="Electrical">Electrical</button>
-      <button class="option" data-branch="Civil">Civil</button>
-      <button class="option" data-branch="Mechanical">Mechanical</button>
-      <button class="option" data-branch="E&TC">E&TC</button>
-    </section>
-
-    <!-- Study Year Selection -->
-    <section class="card" id="studyPage" style="display:none">
-      <h1 id="branchTitle"></h1>
-      <p class="subtitle">Select Study Year</p>
-      <div class="divider"></div>
-      <button class="option" data-study="SY">Second Year (SY)</button>
-      <button class="option" data-study="TY">Third Year (TY)</button>
-      <button class="option" data-study="LY">Last Year (LY)</button>
-      <button class="option secondary" id="backBranch">← Back to Branch</button>
-    </section>
-
-    <!-- Academic Year Selection -->
-    <section class="card" id="yearPage" style="display:none">
-      <h1 id="yearTitle"></h1>
-      <p class="subtitle">Select Academic Year</p>
-      <div class="divider"></div>
-      <button class="option" data-year="2025-26">2025–26</button>
-      <button class="option" data-year="2024-25">2024–25</button>
-      <button class="option" data-year="2023-24">2023–24</button>
-      <button class="option secondary" id="backStudy">← Back</button>
-    </section>
-
-    <!-- Subject Selection -->
-    <section class="card" id="subjectPage" style="display:none">
-      <h1 id="subjectTitle"></h1>
-      <p class="subtitle">Select Subject</p>
-      <div class="divider"></div>
-      <div id="subjectList"></div>
-      <button class="option secondary" id="backYear">← Back to Academic Year</button>
-    </section>
-
-    <!-- Paper Type Selection -->
-    <section class="card" id="paperTypePage" style="display:none">
-      <h1>Select Paper Type</h1>
-      <p class="subtitle" id="paperTypeSubtitle">Click a button below to open the PDF.</p>
-      <div class="divider"></div>
-      <div id="paperTypeButtons"></div>
-      <button class="option secondary" id="backToSubjects">← Back to Subjects</button>
-    </section>
-
-    <!-- ─── ADMIN DASHBOARD ─── -->
-    <section class="card" id="adminDashboard" style="display:none">
-
-      <div class="admin-header">
-        <h1 style="font-size:22px;">File Management</h1>
-        <span class="admin-badge">Admin</span>
+      <p class="sub" style="margin-top:5px">Question Paper Management System</p>
+    </div>
+    <div class="rule"></div>
+    <form id="adminForm" style="display:flex;flex-direction:column;gap:11px">
+      <div class="field">
+        <label for="aname">Admin ID</label>
+        <input type="text" id="aname" placeholder="Enter admin username" autocomplete="username" required>
       </div>
-      <p class="subtitle">Select a PDF, name it, then upload.</p>
-
-      <div class="divider"></div>
-
-      <!-- STEP 1: Select File (always visible) -->
-      <span class="section-label">Select PDF</span>
-
-      <!-- File drop zone -->
-      <div class="file-select-zone" id="fileDropZone">
-        <input type="file" id="pdfFileInput" accept=".pdf" />
-        <span class="file-select-icon">📂</span>
-        <span class="file-select-text">Select File</span>
-        <span class="file-select-hint">Click to browse or drag & drop a PDF</span>
+      <div class="field">
+        <label for="apass">Password</label>
+        <input type="password" id="apass" placeholder="Enter password" autocomplete="current-password" required>
+        <button type="button" class="pw-eye" id="aEye">👁</button>
       </div>
+      <button type="submit" class="btn btn-primary">Sign In →</button>
+      <button type="button" id="backBtn" class="btn btn-ghost">← Student Login</button>
+    </form>
+  </section>
 
-      <!-- File preview (hidden until file selected) -->
-      <div class="file-preview" id="filePreview">
-        <span class="file-preview-icon">📄</span>
-        <div class="file-preview-info">
-          <div class="file-preview-name" id="filePreviewName">—</div>
-          <div class="file-preview-size" id="filePreviewSize">—</div>
+  <!-- BROWSE PAGE -->
+  <section class="card" id="browsePage" style="display:none">
+    <div class="page-head">
+      <div class="user-pill">
+        <div class="avatar">S</div>
+        <div class="user-info">
+          <div class="name" id="browseUser">Student</div>
+          <div class="role">Question Paper Archive</div>
         </div>
-        <button class="file-preview-remove" id="removeFileBtn" title="Remove file">✕</button>
       </div>
+      <button class="logout-btn" id="browseOut">← Logout</button>
+    </div>
+    <div class="rule"></div>
 
-      <!-- STEP 2: Name Selection (hidden until file chosen) -->
-      <div id="namingSection" style="display:none; display:none; flex-direction:column; gap:14px;">
+    <div class="stepper" id="stepper">
+      <div class="s-dot active" id="sd1"></div><div class="s-line" id="sl1"></div>
+      <div class="s-dot" id="sd2"></div><div class="s-line" id="sl2"></div>
+      <div class="s-dot" id="sd3"></div><div class="s-line" id="sl3"></div>
+      <div class="s-dot" id="sd4"></div><div class="s-line" id="sl4"></div>
+      <div class="s-dot" id="sd5"></div>
+    </div>
 
-        <div class="divider"></div>
-        <span class="section-label">Choose Name</span>
+    <div class="step" id="sBranch">
+      <div class="step-lbl"><span class="step-num">1</span>Branch / Department</div>
+      <select id="dBranch">
+        <option value="">— Select branch —</option>
+        <option>First Year</option><option>CS&amp;E</option><option>CSE[DS]</option>
+        <option>AIML</option><option>AIDS</option><option>IT</option>
+        <option>Electrical</option><option>Civil</option><option>Mechanical</option><option>E&amp;TC</option>
+      </select>
+    </div>
 
-        <div class="two-col">
-          <div class="input-group">
-            <label>Branch</label>
-            <select id="adminBranch">
-              <option value="First Year">First Year</option>
-              <option value="CS&E">CS&E</option>
-              <option value="CSE[DS]">CSE[DS]</option>
-              <option value="AIML">AIML</option>
-              <option value="AIDS">AIDS</option>
-              <option value="IT">IT</option>
-              <option value="Electrical">Electrical</option>
-              <option value="Civil">Civil</option>
-              <option value="Mechanical">Mechanical</option>
-              <option value="E&TC">E&TC</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label>Study Year</label>
-            <select id="adminStudy">
-              <option value="SY">SY</option>
-              <option value="TY">TY</option>
-              <option value="LY">LY</option>
-            </select>
-          </div>
-        </div>
+    <div class="step off" id="sStudy">
+      <div class="step-lbl"><span class="step-num">2</span>Study Year</div>
+      <select id="dStudy">
+        <option value="">— Select year —</option>
+        <option value="FY" id="fyOpt" style="display:none">First Year (FY) — Sem 1 &amp; 2</option>
+        <option value="SY">Second Year (SY) — Sem 3 &amp; 4</option>
+        <option value="TY">Third Year (TY) — Sem 5 &amp; 6</option>
+        <option value="LY">Last Year (LY) — Sem 7 &amp; 8</option>
+      </select>
+    </div>
 
-        <div class="two-col">
-          <div class="input-group">
-            <label>Academic Year</label>
-            <select id="adminYear">
-              <option value="2025-26">2025-26</option>
-              <option value="2024-25">2024-25</option>
-              <option value="2023-24">2023-24</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label>Paper Type</label>
-            <select id="adminType"></select>
-          </div>
-        </div>
+    <div class="step off" id="sAcad">
+      <div class="step-lbl"><span class="step-num" id="sn3">3</span>Academic Year</div>
+      <select id="dAcad">
+        <option value="">— Select academic year —</option>
+        <option value="2025-26">2025 – 26 &nbsp;(Current)</option>
+        <option value="2024-25">2024 – 25</option>
+        <option value="2023-24">2023 – 24</option>
+      </select>
+    </div>
 
-        <div class="input-group">
-          <label>Subject</label>
-          <select id="adminSubject"></select>
-        </div>
+    <div class="step off" id="sSubj">
+      <div class="step-lbl"><span class="step-num" id="sn4">4</span>Subject</div>
+      <select id="dSubj"><option value="">— Select subject —</option></select>
+    </div>
 
-        <!-- Generated Filename -->
-        <div class="divider"></div>
-        <span class="section-label">Final Name</span>
+    <div id="sPaper" style="display:none;flex-direction:column;gap:9px">
+      <div class="step-lbl"><span class="step-num" id="sn5">5</span>Paper Type</div>
+      <div class="pt-grid" id="ptGrid"></div>
+      <div class="open-msg" id="openMsg">📄 Paper opened in a new tab. If missing, it may not be uploaded yet — contact your admin.</div>
+    </div>
+  </section>
 
-        <div class="filename-display">
-          <span class="filename-icon">🏷️</span>
-          <div>
-            <div class="filename-label">File will be saved as</div>
-            <div class="filename-value" id="adminDisplay">—</div>
-          </div>
-        </div>
+  <!-- ADMIN DASHBOARD -->
+  <section class="card" id="adminDash" style="display:none">
+    <div class="dash-head">
+      <h1 style="font-family:'DM Serif Display',serif;font-size:21px;flex:1">Paper Manager</h1>
+      <span class="badge">⬆ Upload</span>
+    </div>
+    <p class="muted" style="text-align:left;margin-top:-6px">Drop PDFs — metadata selected manually, filename auto-generated.</p>
+    <div class="rule"></div>
+    <span class="sec-lbl">Upload PDFs</span>
 
-        <!-- Upload progress -->
-        <div class="upload-progress" id="uploadProgress">
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progressFill"></div>
-          </div>
-          <div class="progress-label" id="progressLabel">Uploading…</div>
-        </div>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileIn" accept=".pdf" multiple>
+      <span class="drop-icon">📄</span>
+      <span class="drop-txt">Drop question papers here or click to browse</span>
+      <span class="drop-hint">PDFs only · Max 20 MB each</span>
+    </div>
 
-        <p id="uploadStatus" class="success-message" style="display:none;"></p>
-
-        <!-- Upload button -->
-        <button class="option upload-btn" id="uploadBtn">⬆ Upload File</button>
-
+    <div id="nameSec" style="display:none;flex-direction:column;gap:11px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">
+        <span class="sec-lbl" style="flex:1">Files to Upload</span>
+        <span class="count-badge" id="cntBadge">0 files</span>
       </div>
+      <div id="fileList"></div>
+      <button class="add-more" id="addMoreBtn">
+        <input type="file" id="addMoreIn" accept=".pdf" multiple>＋ Add more files
+      </button>
+      <div class="rule"></div>
+      <div class="all-prog" id="allProg">
+        <div class="all-prog-bg"><div class="all-prog-fill" id="allFill"></div></div>
+        <div class="all-prog-lbl" id="allLbl">Preparing…</div>
+      </div>
+      <div class="all-ok" id="allOk"></div>
+      <button class="btn btn-green" id="uploadBtn">⬆ Upload All Files</button>
+      <button class="btn btn-ghost" id="clearBtn">✕ Clear All</button>
+    </div>
+    <div class="rule"></div>
+    <button class="btn btn-danger" id="adminOut">← Logout</button>
+  </section>
 
-      <div class="divider"></div>
-      <button class="option" id="adminLogoutBtn">← Logout</button>
-    </section>
+  <!-- PDF PREVIEW PANEL -->
+  <div id="pdfPanel">
+    <div class="panel-head">
+      <span class="panel-ico">📄</span>
+      <div class="panel-info">
+        <div class="panel-name" id="panelName">—</div>
+        <div class="panel-meta" id="panelMeta">PDF Preview</div>
+      </div>
+      <button class="panel-close" id="panelClose">✕ Close</button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-load" id="panelLoad">
+        <div class="spin-lg"></div>
+        <span style="font-size:12.5px;color:var(--ink3)">Loading…</span>
+      </div>
+      <iframe id="panelFrame" title="PDF Preview"></iframe>
+    </div>
+  </div>
+</main>
 
-  </main>
+<footer>© <span id="yr"></span> Atharva Wagh and Team · All Rights Reserved</footer>
 
-  <script>
-    const subjectsData = {
-      "First Year": ["Mathematics I", "Mathematics II", "Java", "C", "Chemistry", "Physics", "B.E.E.& D.E.", "EG", "CEM", "E.C.S."],
-      "CS&E": { SY: ["DS", "DBMS", "AOA", "CM", "CN", "ANT", "OS", "AI"], TY: ["DBMS", "OS", "AA", "IOT", "CCN", "DWM", "AI", "ATCD"], LY: ["Compiler Design", "AI", "ML", "Big Data"] },
-      "CSE[DS]": { SY: ["DS", "DBS", "MIS", "CSF", "SDS", "FDA"], TY: ["AI", "IS", "ML-II", "CCN", "DC"], LY: ["ACL", "Big Data Analytics", "AI", "Cloud Computing"] },
-      "AIML": { SY: ["DS", "OS", "LAOT", "DBMS"], TY: ["DBMS", "ML", "OS", "CN", "IPCV"], LY: ["Deep Learning", "NLP", "AI Ethics", "Robotics"] },
-      "AIDS": { SY: ["DS", "PSI", "DAA", "AI", "OS", "LOAT", "DBMS"], TY: ["DBMS", "ML", "IPCV", "OS"], LY: ["Deep Learning", "Big Data Analytics", "AI", "Cloud Systems"] },
-      "IT": { SY: ["DS", "OS", "OOP", "DBMS", "COA"], TY: ["DBMS", "OS", "CN", "SEPM"], LY: ["AI", "Cloud Computing", "Cyber Security", "Big Data"] },
-      "Electrical": { SY: ["EMI", "Electromagnetics", "ADE", "EMEE"], TY: ["EM-II", "IEE", "CS", "DBMS", "EME", "PS-II", "ET&U", "IOT & IAEE"], LY: ["Power Electronics", "Renewable Energy", "Smart Grids", "High Voltage Engg."] },
-      "Civil": { SY: ["MCE", "MOS", "IPRP", "CT", "AC"], TY: ["TOS", "TE", "DCS", "EG", "HFM"], LY: ["Environmental Engg.", "Construction Mgmt.", "Bridge Design", "Earthquake Engg."] },
-      "Mechanical": { SY: ["AT", "MP", "AMP", "EM", "MME"], TY: ["IEC", "RES", "IE", "HT", "MV", "TOM", "FMM", "MMM", "APM"], LY: ["IC Engines", "Refrigeration & AC", "Robotics", "CAD/CAM"] },
-      "E&TC": { SY: ["EDC", "DSD", "DSA", "IC", "MCA", "MTE", "SS", "Maths III"], TY: ["OS", "MM", "CS", "DBMS", "DSP", "CN", "SA", "ADC"], LY: ["Optical Communication", "Wireless Communication", "IoT", "Advanced VLSI"] }
+<script>
+/* ── DATA ── */
+const BRANCH_NORM={
+  'First Year':'FirstYear','CS&E':'CSE','CSE[DS]':'CSEDS','AIML':'AIML',
+  'AIDS':'AIDS','IT':'IT','Electrical':'ELEC','Civil':'CIVIL','Mechanical':'MECH','E&TC':'ETC'
+};
+const TYPE_NORM={
+  'TT-I':'TTI','TT-II':'TTII','EndSemester':'ENDSEM','ReEndSemester':'REENDSEM',
+  'TT-I-A':'TTIA','TT-II-A':'TTIIA','EndSem-A':'ENSEMA','ReEndSem-A':'RENSEMA',
+  'TT-I-B':'TTIB','TT-II-B':'TTIIB','EndSem-B':'ENSEMB','ReEndSem-B':'RENSEMB'
+};
+const normStr=s=>(s||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+const normYr=y=>(y||'').replace(/-/g,'');
+function buildFn(b,s,y,sub,t){
+  return `${BRANCH_NORM[b]||normStr(b)}-${(s||'').toUpperCase()}-${normYr(y)}-${normStr(sub)}-${TYPE_NORM[t]||normStr(t)}.pdf`;
+}
+
+const BRANCHES=["First Year","CS&E","CSE[DS]","AIML","AIDS","IT","Electrical","Civil","Mechanical","E&TC"];
+const ACAD_YEARS=["2025-26","2024-25","2023-24"];
+const FY_TYPES=["TT-I-A","TT-II-A","EndSem-A","ReEndSem-A","TT-I-B","TT-II-B","EndSem-B","ReEndSem-B"];
+const OT_TYPES=["TT-I","TT-II","EndSemester","ReEndSemester"];
+const SUBJECTS={
+  "First Year":["Mathematics I","Mathematics II","Java","C","Chemistry","Physics","B.E.E.& D.E.","EG","CEM","E.C.S."],
+  "CS&E":{SY:["DS","DBMS","AOA","CM","CN","ANT","OS","AI"],TY:["DBMS","OS","AA","IOT","CCN","DWM","AI","ATCD"],LY:["Compiler Design","AI","ML","Big Data"]},
+  "CSE[DS]":{SY:["DS","DBS","MIS","CSF","SDS","FDA"],TY:["AI","IS","ML-II","CCN","DC"],LY:["ACL","Big Data Analytics","AI","Cloud Computing"]},
+  "AIML":{SY:["DS","OS","LAOT","DBMS"],TY:["DBMS","ML","OS","CN","IPCV"],LY:["Deep Learning","NLP","AI Ethics","Robotics"]},
+  "AIDS":{SY:["DS","PSI","DAA","AI","OS","LOAT","DBMS"],TY:["DBMS","ML","IPCV","OS"],LY:["Deep Learning","Big Data Analytics","AI","Cloud Systems"]},
+  "IT":{SY:["DS","OS","OOP","DBMS","COA"],TY:["DBMS","OS","CN","SEPM"],LY:["AI","Cloud Computing","Cyber Security","Big Data"]},
+  "Electrical":{SY:["EMI","Electromagnetics","ADE","EMEE"],TY:["EM-II","IEE","CS","DBMS","EME","PS-II","ET&U","IOT & IAEE"],LY:["Power Electronics","Renewable Energy","Smart Grids","High Voltage Engg."]},
+  "Civil":{SY:["MCE","MOS","IPRP","CT","AC"],TY:["TOS","TE","DCS","EG","HFM"],LY:["Environmental Engg.","Construction Mgmt.","Bridge Design","Earthquake Engg."]},
+  "Mechanical":{SY:["AT","MP","AMP","EM","MME"],TY:["IEC","RES","IE","HT","MV","TOM","FMM","MMM","APM"],LY:["IC Engines","Refrigeration & AC","Robotics","CAD/CAM"]},
+  "E&TC":{SY:["EDC","DSD","DSA","IC","MCA","MTE","SS","Maths III"],TY:["OS","MM","CS","DBMS","DSP","CN","SA","ADC"],LY:["Optical Communication","Wireless Communication","IoT","Advanced VLSI"]}
+};
+
+const getSubjects=(b,s)=>b==='First Year'?SUBJECTS['First Year']:(SUBJECTS[b]?.[s]||[]);
+const getTypes=b=>b==='First Year'?FY_TYPES:OT_TYPES;
+const fmtB=b=>b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(2)+' MB';
+const san=s=>(s||'').replace(/[^a-zA-Z0-9\-\[\]&]/g,'');
+
+/* ── TOAST ── */
+function toast(msg,type='err'){
+  const c=document.getElementById('toasts'),el=document.createElement('div');
+  el.className=`toast toast-${type==='ok'?'ok':'err'}`;
+  el.innerHTML=`<span>${type==='ok'?'✅':'⚠️'}</span><span>${msg}</span>`;
+  c.appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),250)},4500);
+}
+
+/* ── PAGE SWITCH ── */
+function showPage(id){
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  const el=document.getElementById(id);
+  if(el){el.style.display='flex';el.style.animation='none';requestAnimationFrame(()=>el.style.animation='');}
+}
+
+/* ── POPULATE SELECT ── */
+function fillSel(el,items,val){
+  if(!el)return;
+  el.innerHTML='';
+  items.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;el.appendChild(o);});
+  if(val&&[...el.options].some(o=>o.value===val))el.value=val;
+}
+
+/* ── PDF PANEL ── */
+let objUrl=null,prevId=null;
+function openPanel(file,id){
+  if(objUrl){URL.revokeObjectURL(objUrl);objUrl=null;}
+  const panel=document.getElementById('pdfPanel'),frame=document.getElementById('panelFrame');
+  document.getElementById('panelName').textContent=file.name;
+  document.getElementById('panelMeta').textContent=fmtB(file.size)+' · PDF Preview';
+  document.getElementById('panelLoad').style.display='flex';
+  frame.src='';panel.classList.add('on');
+  document.getElementById('mainWrap').classList.add('split');
+  prevId=id;objUrl=URL.createObjectURL(file);
+  frame.onload=()=>{if(frame.src)document.getElementById('panelLoad').style.display='none';};
+  frame.src=objUrl;
+}
+function closePanel(){
+  document.getElementById('pdfPanel').classList.remove('on');
+  document.getElementById('mainWrap').classList.remove('split');
+  document.getElementById('panelFrame').src='';
+  if(objUrl){URL.revokeObjectURL(objUrl);objUrl=null;}
+  prevId=null;
+}
+
+/* ── FILE ENTRIES ── */
+let entries=[],nid=0;
+
+function buildEntry(file,id){
+  const el=document.createElement('div');
+  el.className='fe';el.dataset.id=id;
+  el.innerHTML=`
+    <div class="fe-top">
+      <span class="fe-ico">📄</span>
+      <div class="fe-info"><div class="fe-name" title="${file.name}">${file.name}</div><div class="fe-size">${fmtB(file.size)}</div></div>
+      <button class="fe-prev" data-id="${id}">👁 Preview</button>
+      <button class="fe-del" data-id="${id}" title="Remove">✕</button>
+    </div>
+    <div class="fe-body">
+      <div class="meta-grid">
+        <div class="mf"><div class="mf-lbl">Branch</div><select id="fb_${id}"></select></div>
+        <div class="mf"><div class="mf-lbl">Study Year</div>
+          <select id="fs_${id}">
+            <option value="FY">FY</option><option value="SY">SY</option>
+            <option value="TY">TY</option><option value="LY">LY</option>
+          </select>
+        </div>
+        <div class="mf"><div class="mf-lbl">Academic Year</div>
+          <select id="fy_${id}">${ACAD_YEARS.map(y=>`<option value="${y}">${y}</option>`).join('')}</select>
+        </div>
+        <div class="mf"><div class="mf-lbl">Paper Type</div><select id="ft_${id}"></select></div>
+        <div class="mf full"><div class="mf-lbl">Subject</div><select id="fsu_${id}"></select></div>
+      </div>
+      <div class="fe-fname"><span class="fe-fname-lbl">🏷 Filename</span><span class="fe-fname-val" id="ff_${id}">—</span></div>
+      <div class="fe-prog" id="fp_${id}"><div class="prog-bg"><div class="prog-fill" id="fpf_${id}"></div></div><div class="prog-lbl" id="fpl_${id}">Uploading…</div></div>
+      <div class="fe-stat" id="fst_${id}"></div>
+    </div>`;
+  return el;
+}
+
+function initEntry(entry){
+  const{id}=entry;
+  const bEl=document.getElementById(`fb_${id}`),sEl=document.getElementById(`fs_${id}`);
+  const yEl=document.getElementById(`fy_${id}`),tEl=document.getElementById(`ft_${id}`);
+  const suEl=document.getElementById(`fsu_${id}`),fnEl=document.getElementById(`ff_${id}`);
+
+  fillSel(bEl,BRANCHES,BRANCHES[0]);
+
+  const syncStudy=()=>{
+    const fy=bEl.value==='First Year';
+    [...sEl.options].forEach(o=>o.value==='FY'?o.style.display=fy?'':'none':null);
+    if(fy){sEl.value='FY';sEl.disabled=true;}
+    else{sEl.disabled=false;if(sEl.value==='FY')sEl.value='SY';}
+  };
+  const upd=()=>fnEl.textContent=buildFn(bEl.value,sEl.value,yEl.value,suEl.value,tEl.value);
+  const onBranch=()=>{syncStudy();fillSel(suEl,getSubjects(bEl.value,sEl.value));fillSel(tEl,getTypes(bEl.value));upd();};
+  const onStudy=()=>{fillSel(suEl,getSubjects(bEl.value,sEl.value));upd();};
+
+  bEl.addEventListener('change',onBranch);sEl.addEventListener('change',onStudy);
+  yEl.addEventListener('change',upd);tEl.addEventListener('change',upd);suEl.addEventListener('change',upd);
+
+  syncStudy();fillSel(suEl,getSubjects(bEl.value,sEl.value));fillSel(tEl,getTypes(bEl.value));upd();
+
+  entry.bEl=bEl;entry.sEl=sEl;entry.yEl=yEl;entry.tEl=tEl;entry.suEl=suEl;
+  entry.progEl=document.getElementById(`fp_${id}`);
+  entry.progFill=document.getElementById(`fpf_${id}`);
+  entry.progLbl=document.getElementById(`fpl_${id}`);
+  entry.statEl=document.getElementById(`fst_${id}`);
+}
+
+function removeEntry(id){
+  if(prevId===id)closePanel();
+  entries=entries.filter(e=>{if(e.id===id){e.el.remove();return false;}return true;});
+  syncUI();
+}
+
+function syncUI(){
+  const n=entries.length,sec=document.getElementById('nameSec'),dz=document.getElementById('dropZone');
+  document.getElementById('cntBadge').textContent=n===1?'1 file':`${n} files`;
+  if(!n){sec.style.display='none';dz.style.display='block';}
+  else{dz.style.display='none';if(!sec.style.display||sec.style.display==='none')sec.style.display='flex';}
+  const btn=document.getElementById('uploadBtn');
+  if(!btn.disabled)btn.textContent=n>1?`⬆ Upload All ${n} Files`:'⬆ Upload File';
+}
+
+function addFiles(files){
+  for(const f of Array.from(files)){
+    if(f.type!=='application/pdf'){toast(`"${f.name}" is not a PDF.`);continue;}
+    if(f.size>20*1024*1024){toast(`"${f.name}" exceeds 20 MB.`);continue;}
+    const id=nid++,el=buildEntry(f,id);
+    document.getElementById('fileList').appendChild(el);
+    const entry={id,file:f,el};
+    entries.push(entry);initEntry(entry);
+    el.querySelector('.fe-prev').addEventListener('click',()=>openPanel(f,id));
+    el.querySelector('.fe-del').addEventListener('click',()=>removeEntry(id));
+    syncUI();
+  }
+}
+
+/* ── UPLOAD SIMULATION ── */
+function getFn(e){return buildFn(e.bEl.value,e.sEl.value,e.yEl.value,e.suEl.value,e.tEl.value);}
+function simUpload(entry,fn){
+  return new Promise(res=>{
+    let p=0;
+    const iv=setInterval(()=>{
+      p+=Math.random()*22+8;
+      if(p>=100){
+        p=100;clearInterval(iv);
+        entry.progFill.style.width='100%';entry.progLbl.textContent='✓ Done';
+        entry.statEl.className='fe-stat ok';entry.statEl.textContent=`✅ Saved as "${fn}"`;
+        res();
+      }else{entry.progFill.style.width=p+'%';entry.progLbl.textContent=`Uploading… ${Math.floor(p)}%`;}
+    },150);
+  });
+}
+
+async function uploadAll(){
+  if(!entries.length)return;
+  const btn=document.getElementById('uploadBtn'),clr=document.getElementById('clearBtn');
+  btn.disabled=true;clr.disabled=true;
+  document.getElementById('addMoreBtn').style.pointerEvents='none';
+  const prog=document.getElementById('allProg'),fill=document.getElementById('allFill'),lbl=document.getElementById('allLbl');
+  prog.classList.add('on');
+  let done=0;const tot=entries.length;
+  for(const e of entries){
+    const fn=getFn(e);
+    e.progEl.classList.add('on');e.statEl.className='fe-stat';
+    await simUpload(e,fn);
+    done++;fill.style.width=((done/tot)*100)+'%';lbl.textContent=`Uploaded ${done} of ${tot}`;
+    e.el.classList.add('done');
+  }
+  lbl.textContent=`All ${tot} file${tot>1?'s':''} uploaded ✓`;btn.textContent='✅ Done';
+  const ok=document.getElementById('allOk');
+  ok.textContent=`✅ ${tot} file${tot>1?'s':''} successfully uploaded to papers/`;ok.style.display='block';
+  toast(`${tot} file${tot>1?'s':''} uploaded!`,'ok');
+  setTimeout(resetAdmin,4500);
+}
+
+function resetAdmin(){
+  closePanel();entries=[];nid=0;
+  document.getElementById('fileList').innerHTML='';
+  document.getElementById('fileIn').value='';document.getElementById('addMoreIn').value='';
+  document.getElementById('nameSec').style.display='none';document.getElementById('dropZone').style.display='block';
+  document.getElementById('allProg').classList.remove('on');document.getElementById('allFill').style.width='0%';
+  document.getElementById('allLbl').textContent='Preparing…';
+  const ok=document.getElementById('allOk');ok.style.display='none';ok.textContent='';
+  const btn=document.getElementById('uploadBtn');btn.disabled=false;btn.textContent='⬆ Upload All Files';
+  document.getElementById('clearBtn').disabled=false;
+  document.getElementById('addMoreBtn').style.pointerEvents='';
+}
+
+/* ── BROWSE DROPDOWNS ── */
+let selB='',selS='',selA='',selSub='';
+
+const show=id=>{const el=document.getElementById(id);if(el){el.classList.remove('off');el.style.animation='none';requestAnimationFrame(()=>el.style.animation='');}};
+const hide=id=>{const el=document.getElementById(id);if(el)el.classList.add('off');};
+
+function clearFrom(step){
+  if(step<=2&&selB!=='First Year'){hide('sStudy');selS='';document.getElementById('dStudy').value='';}
+  if(step<=3){hide('sAcad');selA='';document.getElementById('dAcad').value='';}
+  if(step<=4){hide('sSubj');selSub='';document.getElementById('dSubj').value='';}
+  if(step<=5){document.getElementById('sPaper').style.display='none';document.getElementById('openMsg').classList.remove('on');}
+  stepperSync();
+}
+
+function stepperSync(){
+  const fy=selB==='First Year';
+  const filled=[!!selB,fy||!!selS,!!selA,!!selSub,false];
+  const ptOn=document.getElementById('sPaper').style.display!=='none';
+  for(let i=1;i<=5;i++){
+    const dot=document.getElementById('sd'+i),line=document.getElementById('sl'+(i-1));
+    if(!dot)continue;
+    const done=i<5?filled[i-1]:ptOn;
+    const active=!done&&(i===1||filled[i-2]||(i===2&&fy));
+    dot.className='s-dot'+(done?' done':active?' active':'');
+    if(line)line.className='s-line'+(filled[i-2]?' done':'');
+  }
+}
+
+function fillSubjects(b,s){
+  const sel=document.getElementById('dSubj');
+  const list=b==='First Year'?SUBJECTS['First Year']:(SUBJECTS[b]?.[s]||[]);
+  sel.innerHTML='<option value="">— Select subject —</option>';
+  list.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;sel.appendChild(o);});
+}
+
+function renderPapers(b,s,a,sub){
+  const grid=document.getElementById('ptGrid');grid.innerHTML='';
+  document.getElementById('openMsg').classList.remove('on');
+  const fy=b==='First Year';
+  const papers=fy?[
+    {lbl:'TT-I',code:'Group A',type:'TT-I-A',icon:'📝'},{lbl:'TT-II',code:'Group A',type:'TT-II-A',icon:'📝'},
+    {lbl:'End Sem',code:'Group A',type:'EndSem-A',icon:'📄'},{lbl:'Re-End',code:'Group A',type:'ReEndSem-A',icon:'🔁'},
+    {lbl:'TT-I',code:'Group B',type:'TT-I-B',icon:'📝'},{lbl:'TT-II',code:'Group B',type:'TT-II-B',icon:'📝'},
+    {lbl:'End Sem',code:'Group B',type:'EndSem-B',icon:'📄'},{lbl:'Re-End',code:'Group B',type:'ReEndSem-B',icon:'🔁'},
+  ]:[
+    {lbl:'Term Test I',code:'TT-I',type:'TT-I',icon:'📝'},{lbl:'Term Test II',code:'TT-II',type:'TT-II',icon:'📝'},
+    {lbl:'End Semester',code:'EndSemester',type:'EndSemester',icon:'📄'},{lbl:'Re-End Sem',code:'ReEndSemester',type:'ReEndSemester',icon:'🔁'},
+  ];
+  papers.forEach((p,i)=>{
+    const btn=document.createElement('button');btn.className='pt-btn';btn.style.animationDelay=(i*.05)+'s';
+    btn.innerHTML=`<span class="icon">${p.icon}</span><div><div class="lbl">${p.lbl}</div><div class="code">${p.code}</div></div>`;
+    btn.onclick=()=>{
+      window.open(`papers/${encodeURIComponent(buildFn(b,fy?'FY':s,a,sub,p.type))}`,'_blank');
+      document.getElementById('openMsg').classList.add('on');
     };
+    grid.appendChild(btn);
+  });
+  const sec=document.getElementById('sPaper');sec.style.display='flex';sec.style.flexDirection='column';
+  stepperSync();
+}
 
-    let selectedBranch = '', selectedStudy = '', selectedYear = '', selectedSubject = '';
-    let selectedFile = null;
+function initBrowse(){
+  const dB=document.getElementById('dBranch'),dS=document.getElementById('dStudy');
+  const dA=document.getElementById('dAcad'),dSub=document.getElementById('dSubj');
 
-    function showPage(page) {
-      document.querySelectorAll('.card').forEach(p => p.style.display = 'none');
-      if (page) { page.style.display = 'flex'; page.style.animation = 'none'; requestAnimationFrame(() => { page.style.animation = ''; }); }
+  dB.addEventListener('change',()=>{
+    selB=dB.value;dB.classList.toggle('chosen',!!selB);clearFrom(2);if(!selB)return;
+    const fy=selB==='First Year',fyOpt=document.getElementById('fyOpt');
+    if(fy){
+      fyOpt.style.display='';dS.querySelectorAll('option:not(#fyOpt):not([value=""])').forEach(o=>o.style.display='none');
+      dS.value='FY';dS.disabled=true;dS.classList.add('chosen');selS='FY';show('sStudy');show('sAcad');
+    }else{
+      fyOpt.style.display='none';dS.querySelectorAll('option').forEach(o=>{if(o.value==='FY')o.style.display='none';else if(o.value)o.style.display='';});
+      dS.value='';dS.disabled=false;dS.classList.remove('chosen');show('sStudy');
     }
+    stepperSync();
+  });
 
-    function sanitize(str) { return str.replace(/[^a-zA-Z0-9]/g, ''); }
+  dS.addEventListener('change',()=>{
+    selS=dS.value;dS.classList.toggle('chosen',!!selS);clearFrom(3);if(!selS)return;
+    show('sAcad');stepperSync();
+  });
 
-    function formatBytes(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-      return (bytes / 1048576).toFixed(2) + ' MB';
+  dA.addEventListener('change',()=>{
+    selA=dA.value;dA.classList.toggle('chosen',!!selA);clearFrom(4);if(!selA)return;
+    fillSubjects(selB,selS);show('sSubj');stepperSync();
+  });
+
+  dSub.addEventListener('change',()=>{
+    selSub=dSub.value;dSub.classList.toggle('chosen',!!selSub);clearFrom(5);if(!selSub)return;
+    renderPapers(selB,selS,selA,selSub);
+  });
+}
+
+function resetBrowse(){
+  selB='';selS='';selA='';selSub='';
+  ['dBranch','dAcad','dSubj'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.classList.remove('chosen');}});
+  const dS=document.getElementById('dStudy');
+  if(dS){dS.value='';dS.classList.remove('chosen');dS.disabled=false;
+    document.getElementById('fyOpt').style.display='none';
+    dS.querySelectorAll('option:not([value=""])').forEach(o=>o.style.display='');}
+  clearFrom(2);hide('sStudy');hide('sAcad');hide('sSubj');
+  document.getElementById('sPaper').style.display='none';
+  document.getElementById('openMsg').classList.remove('on');
+  stepperSync();
+}
+
+/* ── DOM READY ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('yr').textContent=new Date().getFullYear();
+
+  // Eye toggles
+  const eye=(btn,inp)=>{btn.onclick=()=>{inp.type=inp.type==='password'?'text':'password';btn.textContent=inp.type==='password'?'👁':'🔒';};};
+  eye(document.getElementById('uEye'),document.getElementById('upass'));
+  eye(document.getElementById('aEye'),document.getElementById('apass'));
+
+  // Student login
+  document.getElementById('loginForm').onsubmit=e=>{
+    e.preventDefault();
+    const u=document.getElementById('uname').value.trim(),p=document.getElementById('upass').value;
+    if(u==='student'&&p==='1234'){
+      document.getElementById('browseUser').textContent=u.charAt(0).toUpperCase()+u.slice(1);
+      resetBrowse();showPage('browsePage');
+    }else{
+      ['uname','upass'].forEach(id=>{const el=document.getElementById(id);el.classList.add('err');setTimeout(()=>el.classList.remove('err'),400);});
+      toast('Invalid credentials. Please try again.');
     }
+  };
 
-    document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById('toAdminBtn').onclick=()=>showPage('adminLogin');
+  document.getElementById('backBtn').onclick=()=>showPage('loginPage');
 
-      // Password toggles
-      function makeToggle(btnId, inputId) {
-        const btn = document.getElementById(btnId);
-        const inp = document.getElementById(inputId);
-        btn.onclick = () => { inp.type = inp.type === 'password' ? 'text' : 'password'; btn.textContent = inp.type === 'password' ? '🔓' : '🔒'; };
-      }
-      makeToggle('togglePassword', 'password');
-      makeToggle('adminTogglePassword', 'adminPassword');
-
-      // Student login
-      document.getElementById('loginForm').onsubmit = (e) => {
-        e.preventDefault();
-        const u = document.getElementById('username').value;
-        const p = document.getElementById('password').value;
-        if (u === 'student' && p === '1234') {
-          showPage(document.getElementById('branchPage'));
-        } else {
-          const err = document.getElementById('loginError');
-          err.style.display = 'block';
-          setTimeout(() => err.style.display = 'none', 3000);
-        }
-      };
-
-      document.getElementById('adminBtn').onclick = () => showPage(document.getElementById('adminLoginPage'));
-      document.getElementById('backToStudentLogin').onclick = () => showPage(document.getElementById('loginPage'));
-
-      // Admin login
-      document.getElementById('adminLoginForm').onsubmit = (e) => {
-        e.preventDefault();
-        const u = document.getElementById('adminUsername').value;
-        const p = document.getElementById('adminPassword').value;
-        if (u === 'admin' && p === '1234') {
-          showPage(document.getElementById('adminDashboard'));
-          resetFileState();
-        } else {
-          const err = document.getElementById('adminLoginError');
-          err.style.display = 'block';
-          setTimeout(() => err.style.display = 'none', 3000);
-        }
-      };
-
-      // Branch
-      document.querySelectorAll('#branchPage .option').forEach(btn => {
-        btn.onclick = () => {
-          selectedBranch = btn.dataset.branch;
-          if (selectedBranch === 'First Year') {
-            selectedStudy = 'FY';
-            document.getElementById('yearTitle').textContent = 'First Year (FY) — Academic Year';
-            showPage(document.getElementById('yearPage'));
-          } else {
-            document.getElementById('branchTitle').textContent = selectedBranch;
-            showPage(document.getElementById('studyPage'));
-          }
-        };
-      });
-
-      document.querySelectorAll('#studyPage .option[data-study]').forEach(btn => {
-        btn.onclick = () => {
-          selectedStudy = btn.dataset.study;
-          document.getElementById('yearTitle').textContent = `${selectedBranch} · ${selectedStudy} — Academic Year`;
-          showPage(document.getElementById('yearPage'));
-        };
-      });
-
-      document.querySelectorAll('#yearPage .option[data-year]').forEach(btn => {
-        btn.onclick = () => { selectedYear = btn.dataset.year; loadSubjects(); };
-      });
-
-      document.getElementById('backBranch').onclick = () => showPage(document.getElementById('branchPage'));
-      document.getElementById('backStudy').onclick = () => selectedBranch === 'First Year' ? showPage(document.getElementById('branchPage')) : showPage(document.getElementById('studyPage'));
-      document.getElementById('backYear').onclick = () => showPage(document.getElementById('yearPage'));
-      document.getElementById('backToSubjects').onclick = () => showPage(document.getElementById('subjectPage'));
-
-      // Admin events
-      document.getElementById('adminBranch').addEventListener('change', handleAdminBranchChange);
-      document.getElementById('adminStudy').addEventListener('change', adminUpdateSubjects);
-      document.getElementById('adminYear').addEventListener('change', adminGenerate);
-      document.getElementById('adminSubject').addEventListener('change', adminGenerate);
-      document.getElementById('adminType').addEventListener('change', adminGenerate);
-
-      document.getElementById('adminLogoutBtn').onclick = () => {
-        resetFileState();
-        showPage(document.getElementById('loginPage'));
-      };
-
-      // File input
-      const fileInput = document.getElementById('pdfFileInput');
-      const dropZone = document.getElementById('fileDropZone');
-
-      fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
-
-      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
-      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type === 'application/pdf') handleFileSelect(file);
-        else alert('Please select a valid PDF file.');
-      });
-
-      document.getElementById('removeFileBtn').onclick = () => resetFileState();
-
-      // Upload button
-      document.getElementById('uploadBtn').onclick = handleUpload;
-
-      showPage(document.getElementById('loginPage'));
-    });
-
-    function handleFileSelect(file) {
-      if (!file) return;
-      if (file.type !== 'application/pdf') { alert('Please select a PDF file.'); return; }
-      selectedFile = file;
-
-      // Hide drop zone, show file preview
-      document.getElementById('fileDropZone').style.display = 'none';
-      const preview = document.getElementById('filePreview');
-      preview.classList.add('visible');
-      document.getElementById('filePreviewName').textContent = file.name;
-      document.getElementById('filePreviewSize').textContent = formatBytes(file.size);
-
-      // Reveal the naming + upload section with a smooth animation
-      const section = document.getElementById('namingSection');
-      section.style.display = 'flex';
-      section.style.opacity = '0';
-      section.style.transform = 'translateY(10px)';
-      requestAnimationFrame(() => {
-        section.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-        section.style.opacity = '1';
-        section.style.transform = 'translateY(0)';
-      });
-
-      document.getElementById('uploadStatus').style.display = 'none';
-
-      // Init admin dropdowns on first reveal
-      handleAdminBranchChange();
+  // Admin login
+  document.getElementById('adminForm').onsubmit=e=>{
+    e.preventDefault();
+    const u=document.getElementById('aname').value.trim(),p=document.getElementById('apass').value;
+    if(u==='admin'&&p==='1234'){
+      resetAdmin();document.getElementById('quickWrap').style.display='';showPage('adminDash');
+    }else{
+      ['aname','apass'].forEach(id=>{const el=document.getElementById(id);el.classList.add('err');setTimeout(()=>el.classList.remove('err'),400);});
+      toast('Invalid admin credentials.');
     }
+  };
 
-    function resetFileState() {
-      selectedFile = null;
-      document.getElementById('pdfFileInput').value = '';
-      document.getElementById('fileDropZone').style.display = 'block';
-      document.getElementById('filePreview').classList.remove('visible');
+  // Logout
+  document.getElementById('browseOut').onclick=()=>{resetBrowse();showPage('loginPage');};
+  document.getElementById('adminOut').onclick=()=>{
+    resetAdmin();document.getElementById('quickWrap').style.display='none';
+    document.getElementById('aname').value='';document.getElementById('apass').value='';
+    showPage('loginPage');
+  };
 
-      // Hide naming section
-      const section = document.getElementById('namingSection');
-      section.style.display = 'none';
-      section.style.opacity = '0';
+  initBrowse();
 
-      document.getElementById('uploadProgress').classList.remove('visible');
-      document.getElementById('uploadStatus').style.display = 'none';
-      document.getElementById('progressFill').style.width = '0%';
+  // File drop zone
+  const dz=document.getElementById('dropZone'),fi=document.getElementById('fileIn');
+  fi.addEventListener('change',e=>{addFiles(e.target.files);e.target.value='';});
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault();dz.classList.remove('drag');
+    const ps=Array.from(e.dataTransfer.files).filter(f=>f.type==='application/pdf');
+    ps.length?addFiles(ps):toast('Please drop valid PDF files only.');
+  });
+  document.getElementById('addMoreIn').addEventListener('change',e=>{addFiles(e.target.files);e.target.value='';});
+  document.getElementById('uploadBtn').onclick=uploadAll;
+  document.getElementById('clearBtn').onclick=()=>{
+    closePanel();entries.forEach(e=>e.el.remove());entries=[];
+    document.getElementById('fileIn').value='';document.getElementById('addMoreIn').value='';syncUI();
+  };
+  document.getElementById('panelClose').onclick=closePanel;
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
 
-      const btn = document.getElementById('uploadBtn');
-      btn.disabled = false;
-      btn.textContent = '⬆ Upload File';
+  // Quick upload
+  document.getElementById('quickInput').addEventListener('change',async e=>{
+    const files=Array.from(e.target.files).filter(f=>f.type==='application/pdf');
+    if(!files.length){toast('Please select PDF files.');e.target.value='';return;}
+    const prog=document.getElementById('quProg'),msg=document.getElementById('quMsg'),bar=document.getElementById('quBar');
+    prog.classList.add('on');let done=0;
+    for(const f of files){
+      if(f.size>20*1024*1024){toast(`"${f.name}" exceeds 20 MB — skipped.`);done++;continue;}
+      msg.textContent=`Uploading ${done+1}/${files.length}: ${f.name}`;bar.style.width='0%';
+      await new Promise(r=>{let p=0;const iv=setInterval(()=>{p+=Math.random()*28+8;if(p>=100){p=100;bar.style.width='100%';clearInterval(iv);setTimeout(r,180);}else bar.style.width=p+'%';},110);});
+      done++;
     }
+    msg.textContent=`✅ ${done} file${done>1?'s':''} uploaded`;
+    toast(`${done} file${done>1?'s':''} uploaded!`,'ok');
+    e.target.value='';setTimeout(()=>{prog.classList.remove('on');bar.style.width='0%';},3200);
+  });
 
-    function handleUpload() {
-      if (!selectedFile) return;
-      const filenameBase = document.getElementById('adminDisplay').textContent;
-      if (filenameBase === '---') { alert('Please select all paper details first.'); return; }
-
-      const targetFilename = filenameBase + '.pdf';
-      const btn = document.getElementById('uploadBtn');
-      btn.disabled = true;
-      btn.textContent = 'Uploading…';
-
-      const progress = document.getElementById('uploadProgress');
-      const fill = document.getElementById('progressFill');
-      const label = document.getElementById('progressLabel');
-      progress.classList.add('visible');
-
-      // Simulate upload progress (replace with real upload logic)
-      let pct = 0;
-      const interval = setInterval(() => {
-        pct += Math.random() * 18 + 5;
-        if (pct >= 100) { pct = 100; clearInterval(interval); finishUpload(targetFilename, btn, fill, label); }
-        fill.style.width = pct + '%';
-        label.textContent = `Uploading… ${Math.floor(pct)}%`;
-      }, 200);
-    }
-
-    function finishUpload(filename, btn, fill, label) {
-      fill.style.width = '100%';
-      label.textContent = 'Upload complete!';
-      btn.textContent = '✅ Uploaded';
-
-      const status = document.getElementById('uploadStatus');
-      status.textContent = `✅ "${filename}" has been successfully uploaded to papers/.`;
-      status.style.display = 'block';
-
-      setTimeout(() => {
-        document.getElementById('uploadProgress').classList.remove('visible');
-        fill.style.width = '0%';
-        resetFileState();
-      }, 3500);
-    }
-
-    function loadSubjects() {
-      const list = document.getElementById('subjectList');
-      list.innerHTML = '';
-      let subjects = selectedBranch === 'First Year' ? subjectsData["First Year"] : (subjectsData[selectedBranch]?.[selectedStudy] || []);
-      subjects.forEach(sub => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = sub;
-        btn.onclick = () => {
-          selectedSubject = sub;
-          document.getElementById('paperTypeSubtitle').innerHTML = `<b>${selectedSubject}</b> · ${selectedBranch} ${selectedStudy} · ${selectedYear}`;
-          loadPaperTypes();
-          showPage(document.getElementById('paperTypePage'));
-        };
-        list.appendChild(btn);
-      });
-      document.getElementById('subjectTitle').textContent = `${selectedBranch} · ${selectedYear}`;
-      showPage(document.getElementById('subjectPage'));
-    }
-
-    function loadPaperTypes() {
-      const container = document.getElementById('paperTypeButtons');
-      container.innerHTML = '';
-      const fyPapers = [
-        { label: "TT-I Group-A", type: "TT-I-A" }, { label: "TT-II Group-A", type: "TT-II-A" },
-        { label: "End Sem Group-A", type: "EndSem-A" }, { label: "Re-End Sem Group-A", type: "ReEndSem-A" },
-        { label: "TT-I Group-B", type: "TT-I-B" }, { label: "TT-II Group-B", type: "TT-II-B" },
-        { label: "End Sem Group-B", type: "EndSem-B" }, { label: "Re-End Sem Group-B", type: "ReEndSem-B" }
-      ];
-      const otherPapers = [
-        { label: "TT-I", type: "TT-I" }, { label: "TT-II", type: "TT-II" },
-        { label: "End Semester", type: "EndSemester" }, { label: "Re-End Semester", type: "ReEndSemester" }
-      ];
-      (selectedBranch === 'First Year' ? fyPapers : otherPapers).forEach(p => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = p.label;
-        btn.dataset.type = p.type;
-        btn.onclick = (e) => {
-          const type = e.target.dataset.type;
-          const code = selectedBranch === 'First Year' ? 'FY' : selectedStudy;
-          const filename = `${sanitize(selectedBranch)}-${sanitize(code)}-${sanitize(selectedYear)}-${sanitize(selectedSubject)}-${sanitize(type)}.pdf`;
-          window.open(`papers/${filename}`, '_blank');
-          document.getElementById('paperTypeSubtitle').innerHTML =
-            `Opening <b>${type}</b>…<br><span style="font-size:12px;opacity:0.6;">Check the new tab. If not found, contact admin.</span>`;
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    function handleAdminBranchChange() {
-      const branch = document.getElementById('adminBranch').value;
-      const studyEl = document.getElementById('adminStudy');
-      if (branch === 'First Year') {
-        studyEl.innerHTML = `<option value="FY">First Year (FY)</option>`;
-        studyEl.disabled = true;
-      } else {
-        studyEl.innerHTML = `<option value="SY">SY</option><option value="TY">TY</option><option value="LY">LY</option>`;
-        studyEl.disabled = false;
-      }
-      adminUpdateSubjects();
-    }
-
-    function adminUpdateSubjects() {
-      const branch = document.getElementById('adminBranch').value;
-      const study = document.getElementById('adminStudy').value;
-      const subjectEl = document.getElementById('adminSubject');
-      const typeEl = document.getElementById('adminType');
-      subjectEl.innerHTML = '';
-      typeEl.innerHTML = '';
-      const list = branch === "First Year" ? subjectsData["First Year"] : (subjectsData[branch]?.[study] || []);
-      list.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; subjectEl.appendChild(o); });
-      const types = branch === "First Year"
-        ? ["TT-I-A", "TT-II-A", "EndSem-A", "ReEndSem-A", "TT-I-B", "TT-II-B", "EndSem-B", "ReEndSem-B"]
-        : ["TT-I", "TT-II", "EndSemester", "ReEndSemester"];
-      types.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; typeEl.appendChild(o); });
-      adminGenerate();
-    }
-
-    function adminGenerate() {
-      const b = sanitize(document.getElementById('adminBranch').value);
-      const s = sanitize(document.getElementById('adminStudy').value);
-      const y = sanitize(document.getElementById('adminYear').value);
-      const sub = sanitize(document.getElementById('adminSubject').value);
-      const t = sanitize(document.getElementById('adminType').value);
-      document.getElementById('adminDisplay').textContent = `${b}-${s}-${y}-${sub}-${t}`;
-    }
-  </script>
-
-<footer class="footer">
-    © <span id="year"></span> Atharva Wagh· All Rights Reserved
-</footer> 
-
+  showPage('loginPage');
+});
+</script>
 </body>
 </html>
-
