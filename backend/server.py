@@ -89,8 +89,11 @@ def upload():
         return jsonify({"error": r.text}), 500
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
+
+    if request.method == "GET":
+        return "Login endpoint is working"
 
     data = request.json
 
