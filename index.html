@@ -795,18 +795,14 @@ async function uploadFileToGitHub(file, filename){
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-  message: "Upload question paper",
-  content: base64,
-  branch: "main"
-})
+              message: "Upload question paper",
+              content: base64
+            })
           }
         );
 
-        if(!res.ok){
-  const err = await res.text();
-  console.log(err);
-  throw new Error(err);
-}
+        if(!res.ok) throw new Error("Upload failed");
+
         resolve();
 
       }catch(err){
@@ -830,8 +826,17 @@ async function uploadAll(){
   for(const e of entries){
     const fn=getFn(e);
     e.progEl.classList.add('on');e.statEl.className='fe-stat';
-    await uploadFileToGitHub(e.file, fn);
-    done++;fill.style.width=((done/tot)*100)+'%';lbl.textContent=`Uploaded ${done} of ${tot}`;
+    try{
+  await uploadFileToGitHub(e.file, fn);
+  e.statEl.className='fe-stat ok';
+  e.statEl.textContent=`✅ Uploaded "${fn}"`;
+}catch(err){
+  e.statEl.className='fe-stat fail';
+  e.statEl.textContent=`❌ Failed to upload "${fn}"`;
+  console.error(err);
+}
+done++;
+    fill.style.width=((done/tot)*100)+'%';lbl.textContent=`Uploaded ${done} of ${tot}`;
     e.el.classList.add('done');
   }
   lbl.textContent=`All ${tot} file${tot>1?'s':''} uploaded ✓`;btn.textContent='✅ Done';
