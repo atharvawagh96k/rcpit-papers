@@ -802,8 +802,11 @@ async function uploadFileToGitHub(file, filename){
           }
         );
 
-        if(!res.ok) throw new Error("Upload failed");
-
+        if(!res.ok){
+  const err = await res.text();
+  console.log(err);
+  throw new Error(err);
+}
         resolve();
 
       }catch(err){
