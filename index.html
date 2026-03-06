@@ -795,9 +795,10 @@ async function uploadFileToGitHub(file, filename){
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              message: "Upload question paper",
-              content: base64
-            })
+  message: "Upload question paper",
+  content: base64,
+  branch: "main"
+})
           }
         );
 
@@ -1070,9 +1071,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     bar.style.width='0%';
   },3200);
 });
-  });
+});
 
 </script>
 </body>
 </html>
-
