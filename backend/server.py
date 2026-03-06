@@ -23,6 +23,11 @@ def ping():
 
 @app.route("/upload", methods=["POST", "GET"])
 def upload():
+
+    # Test endpoint
+    if request.method == "GET":
+        return jsonify({"message": "Upload API is working"})
+
     file = request.files.get("file")
     filename = request.form.get("filename")
 
@@ -34,7 +39,6 @@ def upload():
     content = base64.b64encode(file.read()).decode()
 
     url = f"https://api.github.com/repos/{REPO}/contents/papers/{filename}"
-    print(f"[UPLOAD] Pushing to: {url}")
 
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
@@ -49,22 +53,28 @@ def upload():
 
     r = requests.put(url, headers=headers, json=data)
 
-    print(f"[UPLOAD] GitHub response: {r.status_code}")
-    print(f"[UPLOAD] GitHub body: {r.text[:500]}")
+    print("[UPLOAD] GitHub response:", r.status_code)
+    print("[UPLOAD] GitHub body:", r.text)
 
+    # File created successfully
     if r.status_code in [200, 201]:
         return jsonify({"status": "ok"})
+
+    # File already exists → update it
     elif r.status_code == 422:
-        # File already exists — need to get SHA and update
         get_r = requests.get(url, headers=headers)
+
         if get_r.status_code == 200:
             sha = get_r.json().get("sha")
             data["sha"] = sha
+
             r2 = requests.put(url, headers=headers, json=data)
-            print(f"[UPLOAD] Update response: {r2.status_code}")
+
             if r2.status_code in [200, 201]:
                 return jsonify({"status": "ok"})
-        return jsonify({"error": r.text}), 500
+
+        return jsonify({"error": "Failed to update existing file"}), 500
+
     else:
         return jsonify({"error": r.text}), 500
 
