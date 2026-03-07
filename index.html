@@ -40,11 +40,9 @@ body{
     radial-gradient(ellipse 60% 40% at 10% 20%,rgba(184,135,42,0.05) 0%,transparent 70%),
     radial-gradient(ellipse 50% 60% at 90% 80%,rgba(15,25,35,0.04) 0%,transparent 70%);
 }
-
 /* ── LAYOUT ── */
 .page{min-height:100dvh;display:grid;place-items:center;padding:24px 16px}
 .page.split{display:flex;flex-direction:row;align-items:flex-start;justify-content:center;padding:24px;gap:20px}
-
 /* ── CARD ── */
 .card{
   width:min(440px,96vw);background:var(--card);
@@ -60,7 +58,6 @@ body{
 }
 #adminDashboard{width:min(520px,96vw)}
 @keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
-
 /* ── TOP BAR ── */
 .topbar{position:fixed;top:16px;right:16px;z-index:1000;display:flex;align-items:center;gap:8px}
 .tb-btn{
@@ -79,7 +76,6 @@ body{
   display:flex;align-items:center;gap:6px;pointer-events:none;transition:all var(--t);
 }
 .upload-wrap:hover .tb-upload{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,102,64,.3)}
-
 /* ── LOGO & HEADING ── */
 .brand{display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:2px}
 .brand-logo{
@@ -93,7 +89,6 @@ body{
 h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var(--ink);line-height:1.2}
 .sub{font-size:13px;color:var(--ink3);text-align:center;line-height:1.55}
 .rule{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:2px 0}
-
 /* ── FORM ── */
 .field{display:flex;flex-direction:column;gap:6px;position:relative}
 .field label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.9px}
@@ -115,7 +110,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
   cursor:pointer;font-size:14px;opacity:.4;transition:opacity .15s;
 }
 .pw-eye:hover{opacity:.9}
-
 /* ── BUTTONS ── */
 .btn{
   display:flex;align-items:center;justify-content:center;gap:8px;
@@ -133,7 +127,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
 .btn-green:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .btn-danger{background:transparent;color:var(--ink3);border:1.5px solid var(--border)}
 .btn-danger:hover{background:var(--red-bg);color:var(--red);border-color:rgba(184,50,50,.25)}
-
 /* ── BROWSE PAGE ── */
 #browsePage{width:min(460px,96vw)}
 .page-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -152,7 +145,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
   cursor:pointer;font-family:'DM Sans',sans-serif;transition:all var(--t);
 }
 .logout-btn:hover{border-color:rgba(184,50,50,.3);color:var(--red);background:var(--red-bg)}
-
 /* ── STEPPER ── */
 .stepper{display:flex;align-items:center;margin-bottom:2px}
 .s-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .28s ease;flex-shrink:0}
@@ -160,7 +152,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
 .s-dot.active{background:var(--gold);transform:scale(1.4)}
 .s-line{flex:1;height:1.5px;background:var(--border);transition:background .28s ease}
 .s-line.done{background:var(--green)}
-
 /* ── STEP ROW ── */
 .step{display:flex;flex-direction:column;gap:6px;animation:appear .28s cubic-bezier(.22,1,.36,1) both}
 @keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -183,7 +174,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
 .step select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-bg)}
 .step select.chosen{border-color:var(--gold);background-color:var(--gold-bg)}
 .step.off{display:none}
-
 /* ── PAPER TYPES ── */
 .pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .pt-btn{
@@ -205,7 +195,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
   line-height:1.5;display:none;
 }
 .open-msg.on{display:block}
-
 /* ── ADMIN DASHBOARD ── */
 .dash-head{display:flex;align-items:center;gap:10px}
 .badge{
@@ -228,7 +217,6 @@ h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,3vw,28px);color:var
 .drop-txt{font-size:14px;font-weight:600;color:var(--gold);display:block;margin-bottom:3px}
 .drop-hint{font-size:11.5px;color:var(--ink3)}
 #fileList{display:flex;flex-direction:column;gap:10px}
-
 /* ── FILE ENTRY ── */
 .fe{
   background:var(--paper);border:1.5px solid var(--gold-border);
@@ -280,7 +268,6 @@ body.dark .fe-top{background:rgba(255,255,255,.025)}
 .fe-stat{font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;display:none}
 .fe-stat.ok{display:block;background:var(--green-bg);color:var(--green);border:1px solid rgba(26,102,64,.2)}
 .fe-stat.fail{display:block;background:var(--red-bg);color:var(--red);border:1px solid rgba(184,50,50,.2)}
-
 /* ── ADD MORE / COUNTS ── */
 .count-badge{
   background:var(--ink);color:#fff;font-size:11px;font-weight:700;
@@ -296,7 +283,6 @@ body.dark .count-badge{background:var(--gold)}
 }
 .add-more input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .add-more:hover{border-color:var(--gold-border);color:var(--gold);background:var(--gold-bg)}
-
 /* ── UPLOAD PROGRESS BAR (global) ── */
 .all-prog{display:none;flex-direction:column;gap:5px}
 .all-prog.on{display:flex}
@@ -308,7 +294,6 @@ body.dark .count-badge{background:var(--gold)}
   border:1px solid rgba(26,102,64,.2);border-radius:var(--r2);
   text-align:center;font-size:13px;font-weight:600;display:none;
 }
-
 /* ── TOAST ── */
 .toasts{position:fixed;top:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:300px}
 .toast{
@@ -323,7 +308,6 @@ body.dark .count-badge{background:var(--gold)}
 .toast-ok{border-left:3px solid var(--green)}
 @keyframes toastIn{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
 @keyframes toastOut{to{opacity:0;transform:translateX(32px)}}
-
 /* ── QUICK UPLOAD PROGRESS ── */
 .qu-prog{
   position:fixed;bottom:64px;right:18px;z-index:9998;
@@ -335,7 +319,6 @@ body.dark .count-badge{background:var(--gold)}
 .qu-prog.on{display:flex;animation:toastIn .28s cubic-bezier(.22,1,.36,1) both}
 .qu-bg{background:var(--border);border-radius:100px;height:3px;overflow:hidden}
 .qu-fill{height:100%;background:linear-gradient(90deg,var(--green),#2a9a52);border-radius:100px;width:0%;transition:width .22s ease}
-
 /* ── PDF PREVIEW PANEL ── */
 #pdfPanel{
   display:none;flex-direction:column;width:380px;min-width:380px;flex-shrink:0;
@@ -371,7 +354,6 @@ body.dark .panel-body{background:#0a0f15}
   border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-
 /* ── FOOTER ── */
 footer{
   position:fixed;bottom:0;left:0;width:100%;text-align:center;
@@ -379,7 +361,6 @@ footer{
   color:var(--ink3);border-top:1px solid var(--border);z-index:100;
   transition:background var(--t);letter-spacing:.2px;
 }
-
 /* ── MISC ── */
 .muted{color:var(--ink3);font-size:12px;text-align:center}
 @media(max-width:860px){.page.split{flex-direction:column;align-items:center}#pdfPanel{width:min(480px,96vw);height:72vh;position:static}}
@@ -387,7 +368,6 @@ footer{
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <div class="upload-wrap" id="quickWrap" style="display:none">
     <input type="file" id="quickInput" accept=".pdf" multiple>
@@ -395,12 +375,9 @@ footer{
   </div>
   <button class="tb-btn" onclick="document.body.classList.toggle('dark')">🌓 Theme</button>
 </div>
-
 <div class="qu-prog" id="quProg"><span id="quMsg">Uploading…</span><div class="qu-bg"><div class="qu-fill" id="quBar"></div></div></div>
 <div class="toasts" id="toasts"></div>
-
 <main class="page" id="mainWrap">
-
   <!-- STUDENT LOGIN -->
   <section class="card" id="loginPage">
     <div class="brand">
@@ -427,7 +404,6 @@ footer{
     </form>
     <p class="muted">Use your college credentials to sign in</p>
   </section>
-
   <!-- ADMIN LOGIN -->
   <section class="card" id="adminLogin" style="display:none">
     <div class="brand">
@@ -453,7 +429,6 @@ footer{
       <button type="button" id="backBtn" class="btn btn-ghost">← Student Login</button>
     </form>
   </section>
-
   <!-- BROWSE PAGE -->
   <section class="card" id="browsePage" style="display:none">
     <div class="page-head">
@@ -467,7 +442,6 @@ footer{
       <button class="logout-btn" id="browseOut">← Logout</button>
     </div>
     <div class="rule"></div>
-
     <div class="stepper" id="stepper">
       <div class="s-dot active" id="sd1"></div><div class="s-line" id="sl1"></div>
       <div class="s-dot" id="sd2"></div><div class="s-line" id="sl2"></div>
@@ -475,7 +449,6 @@ footer{
       <div class="s-dot" id="sd4"></div><div class="s-line" id="sl4"></div>
       <div class="s-dot" id="sd5"></div>
     </div>
-
     <div class="step" id="sBranch">
       <div class="step-lbl"><span class="step-num">1</span>Branch / Department</div>
       <select id="dBranch">
@@ -485,7 +458,6 @@ footer{
         <option>Electrical</option><option>Civil</option><option>Mechanical</option><option>E&amp;TC</option>
       </select>
     </div>
-
     <div class="step off" id="sStudy">
       <div class="step-lbl"><span class="step-num">2</span>Study Year</div>
       <select id="dStudy">
@@ -496,7 +468,6 @@ footer{
         <option value="LY">Last Year (LY) — Sem 7 &amp; 8</option>
       </select>
     </div>
-
     <div class="step off" id="sAcad">
       <div class="step-lbl"><span class="step-num" id="sn3">3</span>Academic Year</div>
       <select id="dAcad">
@@ -506,19 +477,16 @@ footer{
         <option value="2023-24">2023 – 24</option>
       </select>
     </div>
-
     <div class="step off" id="sSubj">
       <div class="step-lbl"><span class="step-num" id="sn4">4</span>Subject</div>
       <select id="dSubj"><option value="">— Select subject —</option></select>
     </div>
-
     <div id="sPaper" style="display:none;flex-direction:column;gap:9px">
       <div class="step-lbl"><span class="step-num" id="sn5">5</span>Paper Type</div>
       <div class="pt-grid" id="ptGrid"></div>
       <div class="open-msg" id="openMsg">📄 Paper opened in a new tab. If missing, it may not be uploaded yet — contact your admin.</div>
     </div>
   </section>
-
   <!-- ADMIN DASHBOARD -->
   <section class="card" id="adminDash" style="display:none">
     <div class="dash-head">
@@ -528,14 +496,12 @@ footer{
     <p class="muted" style="text-align:left;margin-top:-6px">Drop PDFs — metadata selected manually, filename auto-generated.</p>
     <div class="rule"></div>
     <span class="sec-lbl">Upload PDFs</span>
-
     <div class="drop-zone" id="dropZone">
       <input type="file" id="fileIn" accept=".pdf" multiple>
       <span class="drop-icon">📄</span>
       <span class="drop-txt">Drop question papers here or click to browse</span>
       <span class="drop-hint">PDFs only · Max 20 MB each</span>
     </div>
-
     <div id="nameSec" style="display:none;flex-direction:column;gap:11px">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">
         <span class="sec-lbl" style="flex:1">Files to Upload</span>
@@ -557,7 +523,6 @@ footer{
     <div class="rule"></div>
     <button class="btn btn-danger" id="adminOut">← Logout</button>
   </section>
-
   <!-- PDF PREVIEW PANEL -->
   <div id="pdfPanel">
     <div class="panel-head">
@@ -577,9 +542,7 @@ footer{
     </div>
   </div>
 </main>
-
 <footer>© <span id="yr"></span> Atharva Wagh and Team · All Rights Reserved</footer>
-
 <script>
 /* ── DATA ── */
 const BRANCH_NORM={
@@ -594,10 +557,14 @@ const TYPE_NORM={
 const normStr=s=>(s||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
 const normYr=y=>(y||'').replace(/-/g,'');
 function buildFn(b,s,y,sub,t){
-  const type = TYPE_NORM[t] || t;
+  const noGroup = ["Mathematics I","Mathematics II","C","Java"];
+  let type = TYPE_NORM[t] || t;
+  // remove A/B for subjects that should not have groups
+  if(noGroup.includes(sub)){
+    type = type.replace(/A$|B$/,'');
+  }
   return `${BRANCH_NORM[b]}-${s}-${normYr(y)}-${san(sub)}-${type}.pdf`;
 }
-
 const BRANCHES=["First Year","CS&E","CSE[DS]","AIML","AIDS","IT","Electrical","Civil","Mechanical","E&TC"];
 const ACAD_YEARS=["2025-26","2024-25","2023-24"];
 const FY_TYPES=["TTIA","TTIIA","EndSemA","ReEndSemA","TTIB","TTIIB","EndSemB","ReEndSemB"];
@@ -615,12 +582,10 @@ const SUBJECTS={
   "Mechanical":{SY:["AT","MP","AMP","EM","MME"],                       TY:["IEC","RES","IE","HT","MV","TOM","FMM","MMM","APM"],                   LY:["IC Engines","Refrigeration & AC","Robotics","CAD/CAM"]},
   "E&TC":{SY:["EDC","DSD","DSA","IC","MCA","MTE","SS","Maths III"],    TY:["OS","MM","CS","DBMS","DSP","CN","SA","ADC"],                          LY:["Optical Communication","Wireless Communication","IoT","Advanced VLSI"]}
 };
-
 const getSubjects=(b,s)=>b==='First Year'?SUBJECTS['First Year']:(SUBJECTS[b]?.[s]||[]);
 const getTypes=b=>b==='First Year'?FY_TYPES:OT_TYPES;
 const fmtB=b=>b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(2)+' MB';
 const san=s=>(s||'').replace(/[^a-zA-Z0-9\-\[\]&]/g,'');
-
 /* ── TOAST ── */
 function toast(msg,type='err'){
   const c=document.getElementById('toasts'),el=document.createElement('div');
@@ -629,14 +594,12 @@ function toast(msg,type='err'){
   c.appendChild(el);
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),250)},4500);
 }
-
 /* ── PAGE SWITCH ── */
 function showPage(id){
   document.querySelectorAll('.card').forEach(c=>c.style.display='none');
   const el=document.getElementById(id);
   if(el){el.style.display='flex';el.style.animation='none';requestAnimationFrame(()=>el.style.animation='');}
 }
-
 /* ── POPULATE SELECT ── */
 function fillSel(el,items,val){
   if(!el)return;
@@ -644,7 +607,6 @@ function fillSel(el,items,val){
   items.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;el.appendChild(o);});
   if(val&&[...el.options].some(o=>o.value===val))el.value=val;
 }
-
 /* ── PDF PANEL ── */
 let objUrl=null,prevId=null;
 function openPanel(file,id){
@@ -666,10 +628,8 @@ function closePanel(){
   if(objUrl){URL.revokeObjectURL(objUrl);objUrl=null;}
   prevId=null;
 }
-
 /* ── FILE ENTRIES ── */
 let entries=[],nid=0;
-
 function buildEntry(file,id){
   const el=document.createElement('div');
   el.className='fe';el.dataset.id=id;
@@ -701,15 +661,12 @@ function buildEntry(file,id){
     </div>`;
   return el;
 }
-
 function initEntry(entry){
   const{id}=entry;
   const bEl=document.getElementById(`fb_${id}`),sEl=document.getElementById(`fs_${id}`);
   const yEl=document.getElementById(`fy_${id}`),tEl=document.getElementById(`ft_${id}`);
   const suEl=document.getElementById(`fsu_${id}`),fnEl=document.getElementById(`ff_${id}`);
-
   fillSel(bEl,BRANCHES,BRANCHES[0]);
-
   const syncStudy=()=>{
     const fy=bEl.value==='First Year';
     [...sEl.options].forEach(o=>o.value==='FY'?o.style.display=fy?'':'none':null);
@@ -719,25 +676,20 @@ function initEntry(entry){
   const upd=()=>fnEl.textContent=buildFn(bEl.value,sEl.value,yEl.value,suEl.value,tEl.value);
   const onBranch=()=>{syncStudy();fillSel(suEl,getSubjects(bEl.value,sEl.value));fillSel(tEl,getTypes(bEl.value));upd();};
   const onStudy=()=>{fillSel(suEl,getSubjects(bEl.value,sEl.value));upd();};
-
   bEl.addEventListener('change',onBranch);sEl.addEventListener('change',onStudy);
   yEl.addEventListener('change',upd);tEl.addEventListener('change',upd);suEl.addEventListener('change',upd);
-
   syncStudy();fillSel(suEl,getSubjects(bEl.value,sEl.value));fillSel(tEl,getTypes(bEl.value));upd();
-
   entry.bEl=bEl;entry.sEl=sEl;entry.yEl=yEl;entry.tEl=tEl;entry.suEl=suEl;
   entry.progEl=document.getElementById(`fp_${id}`);
   entry.progFill=document.getElementById(`fpf_${id}`);
   entry.progLbl=document.getElementById(`fpl_${id}`);
   entry.statEl=document.getElementById(`fst_${id}`);
 }
-
 function removeEntry(id){
   if(prevId===id)closePanel();
   entries=entries.filter(e=>{if(e.id===id){e.el.remove();return false;}return true;});
   syncUI();
 }
-
 function syncUI(){
   const n=entries.length,sec=document.getElementById('nameSec'),dz=document.getElementById('dropZone');
   document.getElementById('cntBadge').textContent=n===1?'1 file':`${n} files`;
@@ -746,7 +698,6 @@ function syncUI(){
   const btn=document.getElementById('uploadBtn');
   if(!btn.disabled)btn.textContent=n>1?`⬆ Upload All ${n} Files`:'⬆ Upload File';
 }
-
 function addFiles(files){
   for(const f of Array.from(files)){
     if(f.type!=='application/pdf'){toast(`"${f.name}" is not a PDF.`);continue;}
@@ -760,7 +711,6 @@ function addFiles(files){
     syncUI();
   }
 }
-
 /* ── UPLOAD SIMULATION ── */
 function getFn(e){return buildFn(e.bEl.value,e.sEl.value,e.yEl.value,e.suEl.value,e.tEl.value);}
 function simUpload(entry,fn){
@@ -778,20 +728,16 @@ function simUpload(entry,fn){
   });
 }
 async function uploadFileToGitHub(file, filename){
-
   const formData = new FormData();
   formData.append("file", file);
   formData.append("filename", filename);
-
   const res = await fetch(window.location.origin + "/upload", {
     method: "POST",
     body: formData
   });
-
   if(!res.ok){
     throw new Error("Upload failed");
   }
-
 }
 async function uploadAll(){
   if(!entries.length)return;
@@ -823,7 +769,6 @@ done++;
   toast(`${tot} file${tot>1?'s':''} uploaded!`,'ok');
   setTimeout(resetAdmin,4500);
 }
-
 function resetAdmin(){
   closePanel();entries=[];nid=0;
   document.getElementById('fileList').innerHTML='';
@@ -836,13 +781,10 @@ function resetAdmin(){
   document.getElementById('clearBtn').disabled=false;
   document.getElementById('addMoreBtn').style.pointerEvents='';
 }
-
 /* ── BROWSE DROPDOWNS ── */
 let selB='',selS='',selA='',selSub='';
-
 const show=id=>{const el=document.getElementById(id);if(el){el.classList.remove('off');el.style.animation='none';requestAnimationFrame(()=>el.style.animation='');}};
 const hide=id=>{const el=document.getElementById(id);if(el)el.classList.add('off');};
-
 function clearFrom(step){
   if(step<=2&&selB!=='First Year'){hide('sStudy');selS='';document.getElementById('dStudy').value='';}
   if(step<=3){hide('sAcad');selA='';document.getElementById('dAcad').value='';}
@@ -850,7 +792,6 @@ function clearFrom(step){
   if(step<=5){document.getElementById('sPaper').style.display='none';document.getElementById('openMsg').classList.remove('on');}
   stepperSync();
 }
-
 function stepperSync(){
   const fy=selB==='First Year';
   const filled=[!!selB,fy||!!selS,!!selA,!!selSub,false];
@@ -864,27 +805,43 @@ function stepperSync(){
     if(line)line.className='s-line'+(filled[i-2]?' done':'');
   }
 }
-
 function fillSubjects(b,s){
   const sel=document.getElementById('dSubj');
   const list=b==='First Year'?SUBJECTS['First Year']:(SUBJECTS[b]?.[s]||[]);
   sel.innerHTML='<option value="">— Select subject —</option>';
   list.forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;sel.appendChild(o);});
 }
-
 function renderPapers(b,s,a,sub){
+  
   const grid=document.getElementById('ptGrid');grid.innerHTML='';
   document.getElementById('openMsg').classList.remove('on');
   const fy=b==='First Year';
-  const papers=fy?[
-    {lbl:'TT-I',code:'Group A',type:'TT-I-A',icon:'📝'},{lbl:'TT-II',code:'Group A',type:'TT-II-A',icon:'📝'},
-    {lbl:'End Sem',code:'Group A',type:'EndSem-A',icon:'📄'},{lbl:'Re-End',code:'Group A',type:'ReEndSem-A',icon:'🔁'},
-    {lbl:'TT-I',code:'Group B',type:'TT-I-B',icon:'📝'},{lbl:'TT-II',code:'Group B',type:'TT-II-B',icon:'📝'},
-    {lbl:'End Sem',code:'Group B',type:'EndSem-B',icon:'📄'},{lbl:'Re-End',code:'Group B',type:'ReEndSem-B',icon:'🔁'},
-  ]:[
-    {lbl:'Term Test I',code:'TT-I',type:'TT-I',icon:'📝'},{lbl:'Term Test II',code:'TT-II',type:'TT-II',icon:'📝'},
-    {lbl:'End Semester',code:'EndSemester',type:'EndSemester',icon:'📄'},{lbl:'Re-End Sem',code:'ReEndSemester',type:'ReEndSemester',icon:'🔁'},
-  ];
+  const noGroup = ["Mathematics I","Mathematics II","C","Java"];
+  const noGrp = noGroup.includes(sub);
+  const papers = fy
+ ? (noGrp
+    ? [
+        {lbl:'TT-I',code:'',type:'TT-I',icon:'📝'},
+        {lbl:'TT-II',code:'',type:'TT-II',icon:'📝'},
+        {lbl:'End Sem',code:'',type:'EndSem',icon:'📄'},
+        {lbl:'Re-End',code:'',type:'ReEndSem',icon:'🔁'}
+      ]
+    : [
+        {lbl:'TT-I',code:'Group A',type:'TT-I-A',icon:'📝'},
+        {lbl:'TT-II',code:'Group A',type:'TT-II-A',icon:'📝'},
+        {lbl:'End Sem',code:'Group A',type:'EndSem-A',icon:'📄'},
+        {lbl:'Re-End',code:'Group A',type:'ReEndSem-A',icon:'🔁'},
+        {lbl:'TT-I',code:'Group B',type:'TT-I-B',icon:'📝'},
+        {lbl:'TT-II',code:'Group B',type:'TT-II-B',icon:'📝'},
+        {lbl:'End Sem',code:'Group B',type:'EndSem-B',icon:'📄'},
+        {lbl:'Re-End',code:'Group B',type:'ReEndSem-B',icon:'🔁'}
+      ])
+ : [
+    {lbl:'Term Test I',code:'TT-I',type:'TT-I',icon:'📝'},
+    {lbl:'Term Test II',code:'TT-II',type:'TT-II',icon:'📝'},
+    {lbl:'End Semester',code:'EndSemester',type:'EndSemester',icon:'📄'},
+    {lbl:'Re-End Sem',code:'ReEndSemester',type:'ReEndSemester',icon:'🔁'}
+   ];
   papers.forEach((p,i)=>{
     const btn=document.createElement('button');btn.className='pt-btn';btn.style.animationDelay=(i*.05)+'s';
     btn.innerHTML=`<span class="icon">${p.icon}</span><div><div class="lbl">${p.lbl}</div><div class="code">${p.code}</div></div>`;
@@ -898,11 +855,9 @@ function renderPapers(b,s,a,sub){
   const sec=document.getElementById('sPaper');sec.style.display='flex';sec.style.flexDirection='column';
   stepperSync();
 }
-
 function initBrowse(){
   const dB=document.getElementById('dBranch'),dS=document.getElementById('dStudy');
   const dA=document.getElementById('dAcad'),dSub=document.getElementById('dSubj');
-
   dB.addEventListener('change',()=>{
     selB=dB.value;dB.classList.toggle('chosen',!!selB);clearFrom(2);if(!selB)return;
     const fy=selB==='First Year',fyOpt=document.getElementById('fyOpt');
@@ -915,23 +870,19 @@ function initBrowse(){
     }
     stepperSync();
   });
-
   dS.addEventListener('change',()=>{
     selS=dS.value;dS.classList.toggle('chosen',!!selS);clearFrom(3);if(!selS)return;
     show('sAcad');stepperSync();
   });
-
   dA.addEventListener('change',()=>{
     selA=dA.value;dA.classList.toggle('chosen',!!selA);clearFrom(4);if(!selA)return;
     fillSubjects(selB,selS);show('sSubj');stepperSync();
   });
-
   dSub.addEventListener('change',()=>{
     selSub=dSub.value;dSub.classList.toggle('chosen',!!selSub);clearFrom(5);if(!selSub)return;
     renderPapers(selB,selS,selA,selSub);
   });
 }
-
 function resetBrowse(){
   selB='';selS='';selA='';selSub='';
   ['dBranch','dAcad','dSubj'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el.classList.remove('chosen');}});
@@ -944,26 +895,19 @@ function resetBrowse(){
   document.getElementById('openMsg').classList.remove('on');
   stepperSync();
 }
-
 /* ── DOM READY ── */
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('yr').textContent=new Date().getFullYear();
-
   // Eye toggles
   const eye=(btn,inp)=>{btn.onclick=()=>{inp.type=inp.type==='password'?'text':'password';btn.textContent=inp.type==='password'?'👁':'🔒';};};
   eye(document.getElementById('uEye'),document.getElementById('upass'));
   eye(document.getElementById('aEye'),document.getElementById('apass'));
-
 // Student login (backend authentication)
 document.getElementById('loginForm').onsubmit = async e => {
-
   e.preventDefault();
-
   const u = document.getElementById('uname').value.trim();
   const p = document.getElementById('upass').value;
-
   try{
-
     const res = await fetch(window.location.origin + "/login", {
       method: "POST",
       headers: {
@@ -975,47 +919,32 @@ document.getElementById('loginForm').onsubmit = async e => {
         role: "student"
       })
     });
-
     if(res.ok){
-
       document.getElementById('browseUser').textContent =
         u.charAt(0).toUpperCase()+u.slice(1);
-
       resetBrowse();
       showPage('browsePage');
-
     }else{
-
       ['uname','upass'].forEach(id=>{
         const el=document.getElementById(id);
         el.classList.add('err');
         setTimeout(()=>el.classList.remove('err'),400);
       });
-
       toast("Invalid credentials.");
-
     }
-
   }catch(err){
     toast("Server error. Try again.");
   }
-
 };
-
   document.getElementById('toAdminBtn').onclick=()=>showPage('adminLogin');
   document.getElementById('backBtn').onclick=()=>showPage('loginPage');
-
   // Admin login
 // Admin login (backend authentication)
 document.getElementById('adminForm').onsubmit = async e => {
-
   e.preventDefault();
-
   const u = document.getElementById('aname').value.trim();
   const p = document.getElementById('apass').value;
-
   try{
-
     const res = await fetch(window.location.origin + "/login", {
       method: "POST",
       headers: {
@@ -1027,31 +956,22 @@ document.getElementById('adminForm').onsubmit = async e => {
         role: "admin"
       })
     });
-
     if(res.ok){
-
       resetAdmin();
       document.getElementById('quickWrap').style.display='';
       showPage('adminDash');
-
     }else{
-
       ['aname','apass'].forEach(id=>{
         const el=document.getElementById(id);
         el.classList.add('err');
         setTimeout(()=>el.classList.remove('err'),400);
       });
-
       toast("Invalid admin credentials.");
-
     }
-
   }catch(err){
     toast("Server error.");
   }
-
 };
-
   // Logout
   document.getElementById('browseOut').onclick=()=>{resetBrowse();showPage('loginPage');};
   document.getElementById('adminOut').onclick=()=>{
@@ -1059,9 +979,7 @@ document.getElementById('adminForm').onsubmit = async e => {
     document.getElementById('aname').value='';document.getElementById('apass').value='';
     showPage('loginPage');
   };
-
   initBrowse();
-
   // File drop zone
   const dz=document.getElementById('dropZone'),fi=document.getElementById('fileIn');
   fi.addEventListener('change',e=>{addFiles(e.target.files);e.target.value='';});
@@ -1080,48 +998,37 @@ document.getElementById('adminForm').onsubmit = async e => {
   };
   document.getElementById('panelClose').onclick=closePanel;
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel();});
-
   // Quick upload
   document.getElementById('quickInput').addEventListener('change', async e=>{
   const files = Array.from(e.target.files).filter(f=>f.type==='application/pdf');
-
   if(!files.length){
     toast('Please select PDF files.');
     e.target.value='';
     return;
   }
-
   const prog=document.getElementById('quProg');
   const msg=document.getElementById('quMsg');
   const bar=document.getElementById('quBar');
-
   prog.classList.add('on');
   let done=0;
-
   for(const f of files){
-
     if(f.size>20*1024*1024){
       toast(`"${f.name}" exceeds 20 MB — skipped.`);
       done++;
       continue;
     }
-
     msg.textContent=`Uploading ${done+1}/${files.length}: ${f.name}`;
     bar.style.width='30%';
-
     try{
       await uploadFileToGitHub(f, f.name);   // ← real upload
       bar.style.width='100%';
     }catch(err){
       toast(`Failed to upload ${f.name}`);
     }
-
     done++;
   }
-
   msg.textContent=`✅ ${done} file${done>1?'s':''} uploaded`;
   toast(`${done} file${done>1?'s':''} uploaded!`,'ok');
-
   e.target.value='';
   setTimeout(()=>{
     prog.classList.remove('on');
@@ -1129,11 +1036,6 @@ document.getElementById('adminForm').onsubmit = async e => {
   },3200);
 });
 });
-
 </script>
 </body>
 </html>
-
-
-
-
