@@ -584,24 +584,24 @@ footer{
 /* ── DATA ── */
 const BRANCH_NORM={
   'First Year':'FirstYear','CS&E':'CSE','CSE[DS]':'CSEDS','AIML':'AIML',
-  'AIDS':'AIDS','IT':'IT','Electrical':'ELEC','Civil':'CIVIL','Mechanical':'MECH','E&TC':'ETC'
+  'AIDS':'AIDS','IT':'IT','Electrical':'Elec','Civil':'Civil','Mechanical':'Mech','E&TC':'ETC'
 };
 const TYPE_NORM={
-  'TT-I':'TTI','TT-II':'TTII','EndSemester':'ENDSEM','ReEndSemester':'REENDSEM',
-  'TT-I-A':'TTIA','TT-II-A':'TTIIA','EndSem-A':'ENSEMA','ReEndSem-A':'RENSEMA',
-  'TT-I-B':'TTIB','TT-II-B':'TTIIB','EndSem-B':'ENSEMB','ReEndSem-B':'RENSEMB'
+  'TT-I':'TTI','TT-II':'TTII','EndSemester':'EndSem','ReEndSemester':'ReEndSem',
+  'TT-I-A':'TTIA','TT-II-A':'TTIIA','EndSem-A':'EndSemA','ReEndSem-A':'ReEndSemA',
+  'TT-I-B':'TTIB','TT-II-B':'TTIIB','EndSem-B':'EndSemB','ReEndSem-B':'ReEndSemB'
 };
 const normStr=s=>(s||'').replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
 const normYr=y=>(y||'').replace(/-/g,'');
 function buildFn(b,s,y,sub,t){
-  https://your-render-url.onrender.com/ping
-  return `${BRANCH_NORM[b]}-${s}-${normYr(y)}-${san(sub)}-${t}.pdf`;
+  const type = TYPE_NORM[t] || t;
+  return `${BRANCH_NORM[b]}-${s}-${normYr(y)}-${san(sub)}-${type}.pdf`;
 }
 
 const BRANCHES=["First Year","CS&E","CSE[DS]","AIML","AIDS","IT","Electrical","Civil","Mechanical","E&TC"];
 const ACAD_YEARS=["2025-26","2024-25","2023-24"];
 const FY_TYPES=["TTIA","TTIIA","EndSemA","ReEndSemA","TTIB","TTIIB","EndSemB","ReEndSemB"];
-const OT_TYPES=["TT-I","TT-II","EndSemester","ReEndSemester"];
+const OT_TYPES=["TT-I","TT-II","EndSem","ReEndSem"];
 const SUBJECTS={
   "First Year":["Mathematics I","Mathematics II","Java","C","Chemistry","Physics","B.E.E.& D.E.","EG","CEM","E.C.S."],
   "CS&E":{SY:["DS","DBMS","AOA","CM","CN","ANT","OS","AI"],TY:["DBMS","OS","AA","IOT","CCN","DWM","AI","ATCD"],LY:["Compiler Design","AI","ML","Big Data"]},
@@ -888,7 +888,8 @@ function renderPapers(b,s,a,sub){
     const btn=document.createElement('button');btn.className='pt-btn';btn.style.animationDelay=(i*.05)+'s';
     btn.innerHTML=`<span class="icon">${p.icon}</span><div><div class="lbl">${p.lbl}</div><div class="code">${p.code}</div></div>`;
     btn.onclick=()=>{
-      window.open(`papers/${encodeURIComponent(buildFn(b,fy?'FY':s,a,sub,p.type))}`,'_blank');
+      const fn = buildFn(b,fy?'FY':s,a,sub,p.type); 
+      window.open(`https://raw.githubusercontent.com/atharvawagh96k/rcpit-papers/main/papers/${encodeURIComponent(fn)}`,'_blank');
       document.getElementById('openMsg').classList.add('on');
     };
     grid.appendChild(btn);
@@ -1131,5 +1132,6 @@ document.getElementById('adminForm').onsubmit = async e => {
 </script>
 </body>
 </html>
+
 
 
