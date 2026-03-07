@@ -603,16 +603,17 @@ const ACAD_YEARS=["2025-26","2024-25","2023-24"];
 const FY_TYPES=["TTIA","TTIIA","EndSemA","ReEndSemA","TTIB","TTIIB","EndSemB","ReEndSemB"];
 const OT_TYPES=["TT-I","TT-II","EndSem","ReEndSem"];
 const SUBJECTS={
-  "First Year":["Mathematics I","Mathematics II","Java","C","Chemistry","Physics","B.E.E.& D.E.","EG","CEM","E.C.S."],
-  "CS&E":{SY:["DS","DBMS","AOA","CM","CN","ANT","OS","AI"],TY:["DBMS","OS","AA","IOT","CCN","DWM","AI","ATCD"],LY:["Compiler Design","AI","ML","Big Data"]},
-  "CSE[DS]":{SY:["DS","DBS","MIS","CSF","SDS","FDA"],TY:["AI","IS","ML-II","CCN","DC"],LY:["ACL","Big Data Analytics","AI","Cloud Computing"]},
-  "AIML":{SY:["DS","OS","LAOT","DBMS"],TY:["DBMS","ML","OS","CN","IPCV"],LY:["Deep Learning","NLP","AI Ethics","Robotics"]},
-  "AIDS":{SY:["DS","PSI","DAA","AI","OS","LOAT","DBMS"],TY:["DBMS","ML","IPCV","OS"],LY:["Deep Learning","Big Data Analytics","AI","Cloud Systems"]},
-  "IT":{SY:["DS","OS","OOP","DBMS","COA"],TY:["DBMS","OS","CN","SEPM"],LY:["AI","Cloud Computing","Cyber Security","Big Data"]},
-  "Electrical":{SY:["EMI","Electromagnetics","ADE","EMEE"],TY:["EM-II","IEE","CS","DBMS","EME","PS-II","ET&U","IOT & IAEE"],LY:["Power Electronics","Renewable Energy","Smart Grids","High Voltage Engg."]},
-  "Civil":{SY:["MCE","MOS","IPRP","CT","AC"],TY:["TOS","TE","DCS","EG","HFM"],LY:["Environmental Engg.","Construction Mgmt.","Bridge Design","Earthquake Engg."]},
-  "Mechanical":{SY:["AT","MP","AMP","EM","MME"],TY:["IEC","RES","IE","HT","MV","TOM","FMM","MMM","APM"],LY:["IC Engines","Refrigeration & AC","Robotics","CAD/CAM"]},
-  "E&TC":{SY:["EDC","DSD","DSA","IC","MCA","MTE","SS","Maths III"],TY:["OS","MM","CS","DBMS","DSP","CN","SA","ADC"],LY:["Optical Communication","Wireless Communication","IoT","Advanced VLSI"]}
+  "First Year":["B.E.E.& D.E.","C","CEM","Chemistry","E.C.S.","Java","Mathematics I","Mathematics II","Physics"],
+  
+  "CS&E":{SY:["DS","DBMS","AOA","CM","CN","ANT","OS","AI"],            TY:["DBMS","OS","AA","IOT","CCN","DWM","AI","ATCD"],                       LY:["Compiler Design","AI","ML","Big Data"]},
+  "CSE[DS]":{SY:["DS","DBS","MIS","CSF","SDS","FDA"],                  TY:["AI","IS","ML-II","CCN","DC"],                                         LY:["ACL","Big Data Analytics","AI","Cloud Computing"]},
+  "AIML":{SY:["DS","OS","LAOT","DBMS"],                                TY:["DBMS","ML","OS","CN","IPCV"],                                         LY:["Deep Learning","NLP","AI Ethics","Robotics"]},
+  "AIDS":{SY:["DS","PSI","DAA","AI","OS","LOAT","DBMS"],               TY:["DBMS","ML","IPCV","OS"],                                              LY:["Deep Learning","Big Data Analytics","AI","Cloud Systems"]},
+  "IT":{SY:["DS","OS","OOP","DBMS","COA"],                             TY:["DBMS","OS","CN","SEPM"],                                              LY:["AI","Cloud Computing","Cyber Security","Big Data"]},
+  "Electrical":{SY:["EMI","Electromagnetics","ADE","EMEE"],            TY:["EM-II","IEE","CS","DBMS","EME","PS-II","ET&U","IOT & IAEE"],          LY:["Power Electronics","Renewable Energy","Smart Grids","High Voltage Engg."]},
+  "Civil":{SY:["MCE","MOS","IPRP","CT","AC"],                          TY:["TOS","TE","DCS","EG","HFM"],                                          LY:["Environmental Engg.","Construction Mgmt.","Bridge Design","Earthquake Engg."]},
+  "Mechanical":{SY:["AT","MP","AMP","EM","MME"],                       TY:["IEC","RES","IE","HT","MV","TOM","FMM","MMM","APM"],                   LY:["IC Engines","Refrigeration & AC","Robotics","CAD/CAM"]},
+  "E&TC":{SY:["EDC","DSD","DSA","IC","MCA","MTE","SS","Maths III"],    TY:["OS","MM","CS","DBMS","DSP","CN","SA","ADC"],                          LY:["Optical Communication","Wireless Communication","IoT","Advanced VLSI"]}
 };
 
 const getSubjects=(b,s)=>b==='First Year'?SUBJECTS['First Year']:(SUBJECTS[b]?.[s]||[]);
@@ -1132,6 +1133,7 @@ document.getElementById('adminForm').onsubmit = async e => {
 </script>
 </body>
 </html>
+
 
 
 
