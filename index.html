@@ -673,11 +673,23 @@ function initEntry(entry){
     if(fy){sEl.value='FY';sEl.disabled=true;}
     else{sEl.disabled=false;if(sEl.value==='FY')sEl.value='SY';}
   };
-  const upd=()=>fnEl.textContent=buildFn(bEl.value,sEl.value,yEl.value,suEl.value,tEl.value);
+  const upd=()=>{   
+    const noGroup = ["Mathematics I","Mathematics II","C","Java"];
+    
+    if(noGroup.includes(suEl.value)){
+      fillSel(tEl,["TT-I","TT-II","EndSem","ReEndSem"]);
+    }else{
+      fillSel(tEl,getTypes(bEl.value));
+    }
+    fnEl.textContent=buildFn(bEl.value,sEl.value,yEl.value,suEl.value,tEl.value);
+  };
   const onBranch=()=>{syncStudy();fillSel(suEl,getSubjects(bEl.value,sEl.value));fillSel(tEl,getTypes(bEl.value));upd();};
   const onStudy=()=>{fillSel(suEl,getSubjects(bEl.value,sEl.value));upd();};
-  bEl.addEventListener('change',onBranch);sEl.addEventListener('change',onStudy);
-  yEl.addEventListener('change',upd);tEl.addEventListener('change',upd);suEl.addEventListener('change',upd);
+  bEl.addEventListener('change',onBranch);
+  sEl.addEventListener('change',onStudy);
+  yEl.addEventListener('change',upd);
+  tEl.addEventListener('change',upd);
+  suEl.addEventListener('change',upd);
   syncStudy();fillSel(suEl,getSubjects(bEl.value,sEl.value));fillSel(tEl,getTypes(bEl.value));upd();
   entry.bEl=bEl;entry.sEl=sEl;entry.yEl=yEl;entry.tEl=tEl;entry.suEl=suEl;
   entry.progEl=document.getElementById(`fp_${id}`);
@@ -1039,3 +1051,4 @@ document.getElementById('adminForm').onsubmit = async e => {
 </script>
 </body>
 </html>
+
